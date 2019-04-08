@@ -1,0 +1,39 @@
+{% extends "./_base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    {{ form.certifications.errors }}
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                {% if item.name2 == null %}
+                    <h2 class="text-center">{{ user.get_full_name }}　さんの評価画面</h2>
+                {% else %}
+                    <h2 class="text-center">{{ item.name2 }}　さんの評価画面</h2>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="float-right">
+                    <a class="btn btn-outline-dark" href="{% url 'index' %}">戻る</a>
+                    <a class="btn btn-outline-dark save" href="#">保存</a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <form method="post" id="myform">
+                    {% crispy form %}
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="float-right mb-3">
+                    <a class="btn btn-outline-dark" href="{% url 'index' %}">戻る</a>
+                    <a class="btn btn-outline-dark save" href="#">保存</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
