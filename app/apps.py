@@ -7,4 +7,4 @@ class AppConfig(AppConfig):
     管理画面での表示名を指定する
     """
     name = 'app'
-    verbose_name = '人事考課'
+    verbose_name = '評価データ'

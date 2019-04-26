@@ -5,13 +5,12 @@
     <div class="col-7 col-sm-9">
         <p>{{ item.created_by.get_full_name }}</p>
     </div>
-</div>
-<div class="row">
-    <div class="col-5 col-sm-3">
-        <p>作成時間</p>
-    </div>
-    <div class="col-7 col-sm-9">
-        <p>{{ item.created_at|date:"Y/m/d G:i:s" }}</p>
+    <div class="col-9 col-sm-9">
+        {% if item.Q1_1 == null %}
+            <p>未入力</p>
+        {% else %}
+            <p>入力済</p>
+        {% endif %}
     </div>
 </div>
 <div class="row">

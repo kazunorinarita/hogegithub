@@ -5,11 +5,7 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                {% if item.name2 == null %}
-                    <h2 class="text-center">{{ item.created_by.get_full_name }}　さんの自己評価</h2>
-                {% else %}
-                    <h2 class="text-center">{{ item.name }}　さんの評価</h2>
-                {% endif %}
+                <h2 class="text-center">{{ item1.name }}　さんの一次評価</h2>
             </div>
         </div>
         <div class="row">

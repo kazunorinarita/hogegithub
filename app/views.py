@@ -1,17 +1,75 @@
+from django.db import models
+
+import django_filters
+from django.shortcuts import render
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic import ListView
+
 from django_filters.views import FilterView
 
 from .filters import ItemFilterSet
-from .forms import ItemForm
+
+from .forms import Item0Form
+
+from .forms import Item1Form
+from .forms import Item2Form
+from .forms import Item3Form
+from .forms import Item4Form
+from .forms import Item5Form
+from .forms import Item6Form
 from .models import Item
-from .forms import ItemForm2
+
+from .forms import Item11Form
+from .forms import Item12Form
+from .forms import Item13Form
+from .forms import Item14Form
+from .forms import Item15Form
+from .forms import Item16Form
+from .models import Item1
+
+from .forms import Item21Form
+from .forms import Item22Form
+from .forms import Item23Form
+from .forms import Item24Form
+from .forms import Item25Form
+from .forms import Item26Form
 from .models import Item2
 
+from .forms import KeyForm
+from .models import Key
+
+from users.models import User
+
+#from django.contrib.auth.models import User
+#from django.contrib.auth import get_user_model
+
+from django.http.response import HttpResponse
+from django.shortcuts import render, render_to_response
+from django.contrib.staticfiles.templatetags.staticfiles import static
+from . import forms
+from django.template.context_processors import csrf
+
+from django.core.paginator import Paginator
+from django.core.paginator import EmptyPage, InvalidPage
+from django.core.paginator import PageNotAnInteger
+from pure_pagination.mixins import PaginationMixin
+
+from django.shortcuts import redirect
+
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.shortcuts import render
+
+from django.template import Library
+
+from django.http import HttpResponse
+
+from rules.contrib.views import PermissionRequiredMixin
 
 # 未ログインのユーザーにアクセスを許可する場合は、LoginRequiredMixinを継承から外してください。
 #
@@ -26,8 +84,8 @@ class ItemFilterView(LoginRequiredMixin, FilterView):
     ・django-filter 一覧画面(ListView)に検索機能を追加
     https://django-filter.readthedocs.io/en/master/
     """
+    #model = Item
     model = Item
-
     # django-filter 設定
     filterset_class = ItemFilterSet
     # django-filter ver2.0対応 クエリ未設定時に全件表示する設定
@@ -58,8 +116,54 @@ class ItemFilterView(LoginRequiredMixin, FilterView):
         """
         ソート順・デフォルトの絞り込みを指定
         """
-        # デフォルトの並び順として、登録時間（降順）をセットする。
-        return Item.objects.all().order_by('-created_at')
+        current_user = self.request.user
+
+        key1 =  User.objects.values_list('id',flat=False).get(pk=current_user.id)
+        #key1 = Key.objects.filter(Key_2__in=current_user.id)
+        #key1 = Key.objects.filter(Key_1=current_user.id)
+        key_list =[]
+        key_list = list(key1)
+        #keys2 = Key.objects.filter(Key_2__in=key1) 
+        
+        for obj1 in Key.objects.filter(Key_2__in=key1):
+            key_list.append(obj1.Key_1)
+
+        #keys3 = Key.objects.filter(Key_3__in=key1) 
+
+        for obj2 in Key.objects.filter(Key_3__in=key1):
+            key_list.append(obj2.Key_1)
+
+
+        #for key3 in keys3:
+        #    key_list.append(iter(key3))
+
+        #if key2.first() is not None:
+        #    key2_list = Key.objects.values_list('Key_1',flat=False).get(Key_2=current_user.id)
+        #    print("12345")
+        #    print(key2_list)
+        #    key_list.extend(key2_list)
+        #if key3.first() is not None:
+        #    key3_list = Key.objects.values_list('Key_1',flat=False).get(Key_3=current_user.id)
+        #    if key2_list != key3_list:
+        #        key_list.extend(key3_list)
+
+        #key1 = self.request.user.groups.values_list('name',flat=True)
+        #item_list2 = Item.objects.values('created_by_id' ,'Key__Key_2' )
+        #item_list2 = Item.objects.values('created_by_id' ,'Key__Key_2' )
+
+        #item_lists = Item.objects.filter(created_by_id__in=key_list)
+        #for item_list in item_lists:
+        #item_list = Item.objects.filter(created_by_id__in=key_list).values_list('id', flat=True)
+        #item_list.extend(key2)
+        #print(item_list)
+        
+        if self.request.user.is_superuser: # スーパーユーザの場合、リストにすべてを表示する。
+            return Item.objects.all().order_by('-created_at')
+        else:# 一般ユーザは自分のレコードのみ表示する。
+            return Item.objects.filter(created_by_id__in=key_list)
+
+        #    return Item.objects.filter(id=current_user.id)
+        #    return Item.objects.filter(id__in=key1)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         """
@@ -69,33 +173,12 @@ class ItemFilterView(LoginRequiredMixin, FilterView):
         # 例：kwargs['sample'] = 'sample'
         return super().get_context_data(object_list=object_list, **kwargs)
 
-
-class ItemDetailView(LoginRequiredMixin, UpdateView):
-    """
-    ビュー：自己評価画面
-    """
-    model = Item
-    form_class = ItemForm
-    success_url = reverse_lazy('index')
-
-    def form_valid(self, form):
-        """
-        自己評価処理
-        """
-        item = form.save(commit=False)
-        item.updated_by = self.request.user
-        item.updated_at = timezone.now()
-        item.save()
-
-        return HttpResponseRedirect(self.success_url)
-
-
 class ItemCreateView(LoginRequiredMixin, CreateView):
     """
-    ビュー：更新画面
+    ビュー：登録画面
     """
     model = Item
-    form_class = ItemForm
+    form_class = Item0Form
     success_url = reverse_lazy('index')
 
     def form_valid(self, form):
@@ -110,37 +193,116 @@ class ItemCreateView(LoginRequiredMixin, CreateView):
         item.updated_at = timezone.now()
         item.save()
 
-        item2 = Item2(keyname=Item,name=item.name)
+        item1 = Item1(keyname=Item,name=item.name,created_by1=item.created_by)
+        item1.save()
+
+        item2 = Item2(keyname=Item,name=item.name,created_by2=item.created_by)
         item2.save()
 
         return HttpResponseRedirect(self.success_url)
 
-class ItemUpdateView(LoginRequiredMixin, UpdateView):
-    """
-    ビュー：更新画面
-    """
-    model = Item2
-    form_class = ItemForm2
-    success_url = reverse_lazy('index')
-
-    def form2_valid(self, form):
-        """
-        更新処理
-        """
-        item2 = form.save(commit=False)
-        item2.updated_by2 = self.request.user
-        item2.updated_at2 = timezone.now()
-        item2.save()
-
-        return HttpResponseRedirect(self.success_url)
-
-
-class ItemDeleteView(LoginRequiredMixin, UpdateView):
+class ItemUpdateView_1(LoginRequiredMixin, UpdateView):
     """
     ビュー：更新画面
     """
     model = Item
-    form_class = ItemForm
+    form_class = Item1Form
+    success_url = reverse_lazy('update2')
+    permission_required = 'app.rules_change_item'
+
+    def form_valid(self, form):
+        """
+        更新処理
+        """
+        item = form.save(commit=False)
+        item.updated_by = self.request.user
+        item.updated_at = timezone.now()
+        item.save()
+
+        return redirect('update2', pk=item.pk)
+
+class ItemUpdateView_2(LoginRequiredMixin, UpdateView):
+    """
+    ビュー：更新画面
+    """
+    model = Item
+    form_class = Item2Form
+    success_url = reverse_lazy('update3')
+
+    def form_valid(self, form):
+        """
+        更新処理
+        """
+        item = form.save(commit=False)
+        item.updated_by = self.request.user
+        item.updated_at = timezone.now()
+        item.save()
+
+        return redirect('update3', pk=item.pk)
+
+class ItemUpdateView_3(LoginRequiredMixin, UpdateView):
+    """
+    ビュー：更新画面
+    """
+    model = Item
+    form_class = Item3Form
+    success_url = reverse_lazy('update4')
+
+    def form_valid(self, form):
+        """
+        更新処理
+        """
+        item = form.save(commit=False)
+        item.updated_by = self.request.user
+        item.updated_at = timezone.now()
+        item.save()
+
+        return redirect('update4', pk=item.pk)
+
+class ItemUpdateView_4(LoginRequiredMixin, UpdateView):
+    """
+    ビュー：更新画面
+    """
+    model = Item
+    form_class = Item4Form
+    success_url = reverse_lazy('update5')
+
+    def form_valid(self, form):
+        """
+        更新処理
+        """
+        item = form.save(commit=False)
+        item.updated_by = self.request.user
+        item.updated_at = timezone.now()
+        item.save()
+
+        return redirect('update5', pk=item.pk)
+
+class ItemUpdateView_5(LoginRequiredMixin, UpdateView):
+    """
+    ビュー：更新画面
+    """
+    model = Item
+    form_class = Item5Form
+    success_url = reverse_lazy('update6')
+
+    def form_valid(self, form):
+        """
+        更新処理
+        """
+        item = form.save(commit=False)
+        item.updated_by = self.request.user
+        item.updated_at = timezone.now()
+        item.save()
+
+        return redirect('update6', pk=item.pk)
+
+class ItemUpdateView_6(LoginRequiredMixin, UpdateView):
+    """
+    ビュー：更新画面
+    """
+    model = Item
+    form_class = Item6Form
     success_url = reverse_lazy('index')
 
     def form_valid(self, form):
@@ -153,3 +315,288 @@ class ItemDeleteView(LoginRequiredMixin, UpdateView):
         item.save()
 
         return HttpResponseRedirect(self.success_url)
+
+class Item1UpdateView_1(LoginRequiredMixin, UpdateView):
+    """
+    ビュー：自己評価画面
+    """
+    model = Item1
+    form_class = Item11Form
+    success_url = reverse_lazy('update12')
+    permission_required = 'app.rules_change_item1'
+
+    def form_valid(self, form):
+        """
+        自己評価処理
+        """
+        item = form.save(commit=False)
+        item.updated_by = self.request.user
+        item.updated_at = timezone.now()
+        item.save()
+
+        return redirect('update12', pk=item.pk)
+
+class Item1UpdateView_2(LoginRequiredMixin, UpdateView):
+    """
+    ビュー：自己評価画面
+    """
+    model = Item1
+    form_class = Item12Form
+    success_url = reverse_lazy('update13')
+
+    def form_valid(self, form):
+        """
+        自己評価処理
+        """
+        item = form.save(commit=False)
+        item.updated_by = self.request.user
+        item.updated_at = timezone.now()
+        item.save()
+
+        return redirect('update13', pk=item.pk)
+
+class Item1UpdateView_3(LoginRequiredMixin, UpdateView):
+    """
+    ビュー：自己評価画面
+    """
+    model = Item1
+    form_class = Item13Form
+    success_url = reverse_lazy('update14')
+
+    def form_valid(self, form):
+        """
+        自己評価処理
+        """
+        item = form.save(commit=False)
+        item.updated_by = self.request.user
+        item.updated_at = timezone.now()
+        item.save()
+
+        return redirect('update14', pk=item.pk)
+
+class Item1UpdateView_4(LoginRequiredMixin, UpdateView):
+    """
+    ビュー：自己評価画面
+    """
+    model = Item1
+    form_class = Item14Form
+    success_url = reverse_lazy('update15')
+
+    def form_valid(self, form):
+        """
+        自己評価処理
+        """
+        item = form.save(commit=False)
+        item.updated_by = self.request.user
+        item.updated_at = timezone.now()
+        item.save()
+
+        return redirect('update15', pk=item.pk)
+
+class Item1UpdateView_5(LoginRequiredMixin, UpdateView):
+    """
+    ビュー：自己評価画面
+    """
+    model = Item1
+    form_class = Item15Form
+    success_url = reverse_lazy('update16')
+
+    def form_valid(self, form):
+        """
+        自己評価処理
+        """
+        item = form.save(commit=False)
+        item.updated_by = self.request.user
+        item.updated_at = timezone.now()
+        item.save()
+
+        return redirect('update16', pk=item.pk)
+
+class Item1UpdateView_6(LoginRequiredMixin, UpdateView):
+    """
+    ビュー：自己評価画面
+    """
+    model = Item1
+    form_class = Item16Form
+    success_url = reverse_lazy('index')
+
+    def form_valid(self, form):
+        """
+        自己評価処理
+        """
+        item = form.save(commit=False)
+        item.updated_by = self.request.user
+        item.updated_at = timezone.now()
+        item.save()
+
+        return HttpResponseRedirect(self.success_url)
+
+class Item2UpdateView_1(LoginRequiredMixin, UpdateView):
+    """
+    ビュー：自己評価画面
+    """
+    model = Item2
+    form_class = Item21Form
+    success_url = reverse_lazy('update22')
+    permission_required = 'app.rules_change_item2'
+
+    def form_valid(self, form):
+        """
+        自己評価処理
+        """
+        item = form.save(commit=False)
+        item.updated_by = self.request.user
+        item.updated_at = timezone.now()
+        item.save()
+
+        return redirect('update22', pk=item.pk)
+
+class Item2UpdateView_2(LoginRequiredMixin, UpdateView):
+    """
+    ビュー：自己評価画面
+    """
+    model = Item2
+    form_class = Item22Form
+    success_url = reverse_lazy('update23')
+
+    def form_valid(self, form):
+        """
+        自己評価処理
+        """
+        item = form.save(commit=False)
+        item.updated_by = self.request.user
+        item.updated_at = timezone.now()
+        item.save()
+
+        return redirect('update23', pk=item.pk)
+
+class Item2UpdateView_3(LoginRequiredMixin, UpdateView):
+    """
+    ビュー：自己評価画面
+    """
+    model = Item2
+    form_class = Item23Form
+    success_url = reverse_lazy('update24')
+
+    def form_valid(self, form):
+        """
+        自己評価処理
+        """
+        item = form.save(commit=False)
+        item.updated_by = self.request.user
+        item.updated_at = timezone.now()
+        item.save()
+
+        return redirect('update24', pk=item.pk)
+
+class Item2UpdateView_4(LoginRequiredMixin, UpdateView):
+    """
+    ビュー：自己評価画面
+    """
+    model = Item2
+    form_class = Item24Form
+    success_url = reverse_lazy('update25')
+
+    def form_valid(self, form):
+        """
+        自己評価処理
+        """
+        item = form.save(commit=False)
+        item.updated_by = self.request.user
+        item.updated_at = timezone.now()
+        item.save()
+
+        return redirect('update25', pk=item.pk)
+
+class Item2UpdateView_5(LoginRequiredMixin, UpdateView):
+    """
+    ビュー：自己評価画面
+    """
+    model = Item2
+    form_class = Item25Form
+    success_url = reverse_lazy('update26')
+
+    def form_valid(self, form):
+        """
+        自己評価処理
+        """
+        item = form.save(commit=False)
+        item.updated_by = self.request.user
+        item.updated_at = timezone.now()
+        item.save()
+
+        return redirect('update26', pk=item.pk)
+
+class Item2UpdateView_6(LoginRequiredMixin, UpdateView):
+    """
+    ビュー：自己評価画面
+    """
+    model = Item2
+    form_class = Item26Form
+    success_url = reverse_lazy('index')
+
+    def form_valid(self, form):
+        """
+        自己評価処理
+        """
+        item = form.save(commit=False)
+        item.updated_by = self.request.user
+        item.updated_at = timezone.now()
+        item.save()
+
+        return HttpResponseRedirect(self.success_url)
+
+class ItemDeleteView(LoginRequiredMixin, UpdateView):
+    """
+    ビュー：更新画面
+    """
+    model = Item
+    form_class = Item1Form
+    success_url = reverse_lazy('index')
+
+    def form_valid(self, form):
+        """
+        更新処理
+        """
+        item = form.save(commit=False)
+        item.updated_by = self.request.user
+        item.updated_at = timezone.now()
+        item.save()
+
+        return HttpResponseRedirect(self.success_url)
+
+
+class KeyCreateView(LoginRequiredMixin, CreateView):
+    """
+    ビュー：KEY画面
+    """
+    model = Key
+    form_class = KeyForm
+    success_url = reverse_lazy('index')
+
+    def form_valid(self, form):
+        """
+        更新処理
+        """
+        key = form.save(commit=False)
+        key.save()
+        return HttpResponseRedirect(self.success_url)
+
+
+class ItemUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
+    model = Item
+    form_class = Item1Form
+    success_url = reverse_lazy('index')
+    permission_required = 'app.rules_change_item'
+
+class Item1UpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
+    model = Item1
+    form_class = Item1Form
+    success_url = reverse_lazy('index')
+    permission_required = 'app.rules_change_item1'
+
+class Item2UpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
+    model = Item2
+    form_class = Item1Form
+    success_url = reverse_lazy('index')
+    permission_required = 'app.rules_change_item2'

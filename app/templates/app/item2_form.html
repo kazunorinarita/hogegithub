@@ -5,14 +5,18 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <h2 class="text-center">{{ item2.name2 }}　さんの評価画面</h2>
+                <h2 class="text-center">{{ item2.name }}　さんの二次評価</h2>
             </div>
         </div>
         <div class="row">
             <div class="col-12">
                 <div class="float-right">
-                    <a class="btn btn-outline-dark" href="{% url 'index' %}">戻る</a>
-                    <a class="btn btn-outline-dark save" href="#">保存</a>
+                    <a class="btn btn-outline-dark save" href="{% url 'index' %}">戻る</a>
+                    {% if 'update6' in request.get_full_path %}
+                        <a class="btn btn-outline-dark save" href="#">保存して終了</a>
+                    {% else %}
+                        <a class="btn btn-outline-dark save" href="#">保存して次の評価へ</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -21,13 +25,16 @@
                 <form method="post" id="myform">
                     {% crispy form %}
                 </form>
-            </div>
         </div>
         <div class="row">
             <div class="col-12">
                 <div class="float-right mb-3">
                     <a class="btn btn-outline-dark" href="{% url 'index' %}">戻る</a>
-                    <a class="btn btn-outline-dark save" href="#">保存</a>
+                    {% if 'dupdate6' in request.get_full_path %}
+                        <a class="btn btn-outline-dark save" href="#">保存して終了</a>
+                    {% else %}
+                        <a class="btn btn-outline-dark save" href="#">保存して次の評価へ</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
