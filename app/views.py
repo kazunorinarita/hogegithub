@@ -124,8 +124,6 @@ class ItemFilterView(LoginRequiredMixin, FilterView):
                         
         #for obj1 in Key.objects.filter(Key_2__in=key1):
         #    key_list.append(obj1.Key_1)
-        print(12345)
-        print(self.request.user)
         for obj1 in get_objects_for_user(self.request.user, 'app.view_item'):
             result = self.request.user.has_perm('app.view_item', obj1)
             if result:   
