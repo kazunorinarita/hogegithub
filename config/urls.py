@@ -24,8 +24,8 @@ urlpatterns = [
 
 # 管理サイトの見出しを変更可能
 #  タイトル；タイトルタグで使用
-admin.site.site_title = 'タイトル'
+admin.site.site_title = 'コンピテンシー評価'
 #  サイト名：ログイン画面と管理画面上部の表示
-admin.site.site_header = 'サンプルアプリ'
+admin.site.site_header = 'コンピテンシー評価'
 #  メニュー：管理画面の見出し表示
 admin.site.index_title = 'メニュー'
