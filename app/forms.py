@@ -3,13 +3,7 @@ from django import forms
 from .models import Item
 from .models import Item1
 from .models import Item2
-from .models import Key
 
-
-class KeyForm(forms.ModelForm):
-    class Meta:
-        model = Key
-        fields = ("Key_1", "Key_2", "Key_3")
 
 class Item0Form(forms.ModelForm):
     class Meta:

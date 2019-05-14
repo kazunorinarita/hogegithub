@@ -41,9 +41,6 @@ from .forms import Item25Form
 from .forms import Item26Form
 from .models import Item2
 
-from .forms import KeyForm
-from .models import Key
-
 from users.models import User
 
 #from django.contrib.auth.models import User
@@ -70,6 +67,9 @@ from django.template import Library
 from django.http import HttpResponse
 
 from rules.contrib.views import PermissionRequiredMixin
+
+from guardian.shortcuts import get_objects_for_user
+from guardian.shortcuts import assign_perm
 
 # 未ログインのユーザーにアクセスを許可する場合は、LoginRequiredMixinを継承から外してください。
 #
@@ -119,44 +119,33 @@ class ItemFilterView(LoginRequiredMixin, FilterView):
         current_user = self.request.user
 
         key1 =  User.objects.values_list('id',flat=False).get(pk=current_user.id)
-        #key1 = Key.objects.filter(Key_2__in=current_user.id)
-        #key1 = Key.objects.filter(Key_1=current_user.id)
         key_list =[]
         key_list = list(key1)
-        #keys2 = Key.objects.filter(Key_2__in=key1) 
-        
-        for obj1 in Key.objects.filter(Key_2__in=key1):
-            key_list.append(obj1.Key_1)
+                        
+        #for obj1 in Key.objects.filter(Key_2__in=key1):
+        #    key_list.append(obj1.Key_1)
+        print(12345)
+        print(self.request.user)
+        for obj1 in get_objects_for_user(self.request.user, 'app.view_item'):
+            result = self.request.user.has_perm('app.view_item', obj1)
+            if result:   
+                key_list.append(obj1.created_by_id)
+        for obj2 in get_objects_for_user(self.request.user, 'app.add_item'):
+            result = self.request.user.has_perm('app.add_item', obj2)
+            if result:   
+                key_list.append(obj2.created_by_id)
+        #    user = User.objects.filter(full_name=self.request.user)
+        #    item1 = Item1.objects.filter(created_by1_id=self.request.user.id)
+        #    if key1.has_perm('app.view_item', obj1):
+        #print(projects)
+        #for obj1 in get_objects_for_user(key1, 'app.view_item'):
+        #    print(obj1)
+        #    key_list.append(obj1.user_id)
 
-        #keys3 = Key.objects.filter(Key_3__in=key1) 
-
-        for obj2 in Key.objects.filter(Key_3__in=key1):
-            key_list.append(obj2.Key_1)
+        #for obj2 in Key.objects.filter(Key_3__in=key1):
+        #    key_list.append(obj2.Key_1)
 
 
-        #for key3 in keys3:
-        #    key_list.append(iter(key3))
-
-        #if key2.first() is not None:
-        #    key2_list = Key.objects.values_list('Key_1',flat=False).get(Key_2=current_user.id)
-        #    print("12345")
-        #    print(key2_list)
-        #    key_list.extend(key2_list)
-        #if key3.first() is not None:
-        #    key3_list = Key.objects.values_list('Key_1',flat=False).get(Key_3=current_user.id)
-        #    if key2_list != key3_list:
-        #        key_list.extend(key3_list)
-
-        #key1 = self.request.user.groups.values_list('name',flat=True)
-        #item_list2 = Item.objects.values('created_by_id' ,'Key__Key_2' )
-        #item_list2 = Item.objects.values('created_by_id' ,'Key__Key_2' )
-
-        #item_lists = Item.objects.filter(created_by_id__in=key_list)
-        #for item_list in item_lists:
-        #item_list = Item.objects.filter(created_by_id__in=key_list).values_list('id', flat=True)
-        #item_list.extend(key2)
-        #print(item_list)
-        
         if self.request.user.is_superuser: # スーパーユーザの場合、リストにすべてを表示する。
             return Item.objects.all().order_by('-created_at')
         else:# 一般ユーザは自分のレコードのみ表示する。
@@ -563,23 +552,6 @@ class ItemDeleteView(LoginRequiredMixin, UpdateView):
         item.updated_at = timezone.now()
         item.save()
 
-        return HttpResponseRedirect(self.success_url)
-
-
-class KeyCreateView(LoginRequiredMixin, CreateView):
-    """
-    ビュー：KEY画面
-    """
-    model = Key
-    form_class = KeyForm
-    success_url = reverse_lazy('index')
-
-    def form_valid(self, form):
-        """
-        更新処理
-        """
-        key = form.save(commit=False)
-        key.save()
         return HttpResponseRedirect(self.success_url)
 
 

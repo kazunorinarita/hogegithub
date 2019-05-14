@@ -31,9 +31,7 @@
             <div class="col-12">
                 <a class="btn btn-secondary filtered" style="visibility:hidden" href="/?page=1">検索を解除</a>
                 <div class="float-right mt-1">
-                        <a class="btn btn-outline-dark" href="{% url 'create' %}" >新規</a>
                     {% if request.user.is_superuser %}
-                        <a class="btn btn-outline-dark" href="{% url 'key' %}" >評価者</a>
                         <a class="btn btn-outline-dark" href="{% url 'create' %}" >新規</a>
                         <a class="btn btn-outline-dark" data-toggle="modal" data-target="#myModal" href="#">検索</a>
                     {% endif %}

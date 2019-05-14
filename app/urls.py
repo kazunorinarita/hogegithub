@@ -2,7 +2,7 @@ from django.urls import path
 
 from .models import Item
 from .models import Item2
-from .views import ItemFilterView, ItemUpdateView_1, ItemUpdateView_2, ItemUpdateView_3, ItemUpdateView_4, ItemUpdateView_5, ItemUpdateView_6, ItemCreateView, Item2UpdateView_1, Item2UpdateView_2, Item2UpdateView_3, Item2UpdateView_4, Item2UpdateView_5, Item2UpdateView_6, Item1UpdateView_1, Item1UpdateView_2, Item1UpdateView_3, Item1UpdateView_4, Item1UpdateView_5, Item1UpdateView_6, ItemDeleteView, KeyCreateView
+from .views import ItemFilterView, ItemUpdateView_1, ItemUpdateView_2, ItemUpdateView_3, ItemUpdateView_4, ItemUpdateView_5, ItemUpdateView_6, ItemCreateView, Item2UpdateView_1, Item2UpdateView_2, Item2UpdateView_3, Item2UpdateView_4, Item2UpdateView_5, Item2UpdateView_6, Item1UpdateView_1, Item1UpdateView_2, Item1UpdateView_3, Item1UpdateView_4, Item1UpdateView_5, Item1UpdateView_6, ItemDeleteView
 
 # アプリケーションのルーティング設定
 
@@ -25,11 +25,7 @@ urlpatterns = [
     path('update24/<int:pk>/', Item2UpdateView_4.as_view(), name='update24'),
     path('update25/<int:pk>/', Item2UpdateView_5.as_view(), name='update25'),
     path('update26/<int:pk>/', Item2UpdateView_6.as_view(), name='update26'),
-
     path('create/', ItemCreateView.as_view(), name='create'),
     path('delete/<int:pk>/', ItemDeleteView.as_view(), name='delete'),
-
-    path('key/', KeyCreateView.as_view(), name='key'),
-
     path('', ItemFilterView.as_view(), name='index'),
 ]
