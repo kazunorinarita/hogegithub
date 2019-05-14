@@ -213,7 +213,7 @@ LOGGING = {
     }
 }
 import os
-#import django_heroku
+import django_heroku
 
 if 'DYNO' in os.environ:
     django_heroku.settings(locals())
