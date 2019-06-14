@@ -50,38 +50,60 @@
                         <li class="list-group-item">
                             {# item_detail_contents.html を参考に必要な項目を追加してください #}
                                 <div class="row">
-                                    <div class="col-5 col-sm-3">
+                                    <div class="col-1 col-sm-1">
                                         <p>氏名</p>
                                     </div>
-                                    <div class="col-7 col-sm-9">
-                                        <p>{{ item.created_by.get_full_name }}</p>
+                                    <div class="col-2 col-sm-2">
+                                        <p>{{ item.Itemkey }}</p>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-5 col-sm-3">
-                                        <p>更新時間</p>
+                                    <div class="col-0.5 col-sm-0.5">
+                                        <p>所属</p>
                                     </div>
-                                    <div class="col-7 col-sm-9">
-                                        <p>{{ item.updated_at|date:"Y/m/d G:i:s" }}</p>
+                                    <div class="col-2 col-sm-2">
+                                        <p>{{ item.Itemkey.department }}</p>
+                                    </div>
+                                    <div class="col-0.5 col-sm-0.5">
+                                        <p>職種</p>
+                                    </div>
+                                    <div class="col-2 col-sm-2">
+                                        <p>{{ item.Itemkey.job_type }}</p>
+                                    </div>
+                                    <div class="col-0.5 col-sm-0.5">
+                                        <p>役職</p>
+                                    </div>
+                                    <div class="col-1 col-sm-1">
+                                        <p>{{ item.Itemkey.title }}</p>
                                     </div>
                                 </div>
                             <div class="row">
                                 <div class="col-12">
                                     <div class="float-right">
                                         {% if item.created_by_id == request.user.id %}
-                                                <a class="btn btn-outline-dark " href="{% url 'update1' item.pk %}">自己評価</a>
+                                            {% if item.flag == 1 %}
+                                                <a class="btn-sm btn-success rounded-pill " href="{% url 'update1' item.pk %}">【評価済】自己評価</a>
+                                            {% else %}
+                                                <a class="btn-sm btn-danger rounded-pill " href="{% url 'update1' item.pk %}">【未評価】自己評価</a>
+                                            {% endif %}
                                         {% endif %}
                                         {% if item.created_by_id != request.user.id %}
                                             {% if perms.app.change_item1 == True %}
                                             {% has_perm 'app.rules_view_item1' request.user item as rules_view_item1 %}
-                                            {% if rules_view_item1 %}
-                                                    <a class="btn btn-outline-dark " href="{% url 'update11' item.pk %}">一次評価</a>
+                                                {% if rules_view_item1 %}
+                                                    {% if item.flag1 == 1 %}
+                                                        <a class="btn-sm btn-success " href="{% url 'update11' item.pk %}">【評価済】一次評価</a>
+                                                    {% else %}
+                                                        <a class="btn-sm btn-danger " href="{% url 'update11' item.pk %}">【未評価】一次評価</a>
+                                                    {% endif %}
                                                 {% endif %}
                                             {% endif %}
                                             {% if perms.app.change_item2 == True %}
                                             {% has_perm 'app.rules_add_item2' request.user item as rules_add_item2 %}
                                                 {% if rules_add_item2 %}
-                                                    <a class="btn btn-outline-dark " href="{% url 'update21' item.pk %}">二次評価</a>
+                                                    {% if item.flag2 == 1 %}
+                                                        <a class="btn-sm btn-success " href="{% url 'update21' item.pk %}">【評価済】二次評価</a>
+                                                    {% else %}
+                                                        <a class="btn-sm btn-danger " href="{% url 'update21' item.pk %}">【未評価】二次評価</a>
+                                                    {% endif %}
                                                 {% endif %}
                                             {% endif %}
                                         {% endif %}

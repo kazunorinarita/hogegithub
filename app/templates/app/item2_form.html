@@ -2,40 +2,78 @@
 {% load crispy_forms_tags %}
 {% block content %}
     {{ form.certifications.errors }}
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <h2 class="text-center">{{ item2.name }}　さんの二次評価</h2>
+    {% if messages %}
+        <ul class="alert alert-warning">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <div class="media">
+        <div class="sticky-top">
+            <div class="col-10">
+                {% if item.name2 == null %}
+                    <h5 class="text-center">{{ item2.name }}　さんの二次評価</h5>
+                {% endif %}
+            </div>
+            <div class="col-10">
+                {% if 'update21' in request.get_full_path %}
+                    <h4 class="badge-center badge-pill badge-primary text-center">コミュニケーション力<br>（情報伝達・発信力）</h4>
+                {% endif %}
+                {% if 'update22' in request.get_full_path %}
+                    <h4 class="badge-center badge-pill badge-primary text-center">責任感</h4>
+                {% endif %}
+                {% if 'update23' in request.get_full_path %}
+                    <h4 class="badge-center badge-pill badge-primary text-center">人材育成</h4>
+                {% endif %}
+                {% if 'update24' in request.get_full_path %}
+                    <h4 class="badge-center badge-pill badge-primary text-center">企画推進力</h4>
+                {% endif %}
+                {% if 'update25' in request.get_full_path %}
+                    <h4 class="badge-center badge-pill badge-primary text-center">経営感覚・経営貢献</h4>
+                {% endif %}
+                {% if 'update26' in request.get_full_path %}
+                    <h4 class="badge-center badge-pill badge-primary text-center">マネジメント力・<br>組織管理能力</h4>
+                {% endif %}
+            </div>
+            <div class="col-10">
+                {% if 'update21' in request.get_full_path %}
+                    <h6 class="text-left">☑ 自分の考えを相手に応じてわかりやすく的確に伝えられる。<br>☑ 組織において必要な情報を、的確にわかりやすく正確に伝える力。<br>☑ 自己の理論や企画を実行に移すために、関係者を説得、調整する力<br>　　　　　　　　　　　　　　　　　　　　　　</h6>
+                {% endif %}
+                {% if 'update22' in request.get_full_path %}
+                    <h6 class="text-left">☑ 自己の責任を意識しそれを果たそうとする力　　　　　<br>　　　　　　　　　　　　　　　　　　　　　　　　　　　<br>　　　　　　　　　　　　　　　　　　</h6>
+                {% endif %}
+                {% if 'update23' in request.get_full_path %}
+                    <h6 class="text-left">☑ チームメンバーのやる気と生産性を高め、一人ひとりの成長を促す力<br>　　　　　　　　　　　　　　　　　　　　　　　　　　　<br>　　　　　　　　　　　　　　　　　　　　　　</h6>
+                {% endif %}
+                {% if 'update24' in request.get_full_path %}
+                    <h6 class="text-left">☑ 長期的視点での部署運営より高い課題、<br>ハードルに挑戦し克服していこうとする力<br>　　　　　　　　　　　　　　　　　　　　　　　　　　<br>　　　　　　　　　　　　　　　　　　　　　　　　　　　</h6>
+                {% endif %}
+                {% if 'update25' in request.get_full_path %}
+                    <h6 class="text-left">☑ 業績に関心を持ち自部署だけでなく<br>法人の利益のための広い視野で物事を考える力<br>　　　　　　　　　　　　　　　　　　　　　　　　　　<br>　　　　　　　　　　　　　　　　　　　　　　　　　　　</h6>
+                {% endif %}
+                {% if 'update26' in request.get_full_path %}
+                    <h6 class="text-left">☑ 表面的な情報だけでなく、自分自身の<br>考察を加え、真の課題、問題を的確に<br>捉え、解決策を見出し、チーム全体で行動を促す力　　　　<br>　　　　　　　　　　　　　　　　　　　　　　　　　　</h6>
+                {% endif %}
             </div>
         </div>
-        <div class="row">
+        <div class="fixed-bottom">
             <div class="col-12">
                 <div class="float-right">
-                    <a class="btn btn-outline-dark save" href="{% url 'index' %}">戻る</a>
-                    {% if 'update6' in request.get_full_path %}
-                        <a class="btn btn-outline-dark save" href="#">保存して終了</a>
+                    <a class="btn btn-dark rounded-pill save" href="{% url 'index' %}">保存せずに終了</a>
+                    {% if 'update16' in request.get_full_path %}
+                        <a class="btn btn-dark rounded-pill save" href="#">保存して終了</a>
                     {% else %}
-                        <a class="btn btn-outline-dark save" href="#">保存して次の評価へ</a>
+                        <a class="btn btn-dark rounded-pill save" href="#">保存して次の評価へ</a>
                     {% endif %}
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-12">
+        <div class="mb-auto">
+            <div class="jumbotron jumbotron-fluid">
                 <form method="post" id="myform">
-                    {% crispy form %}
+                    <h6 class="text-left">{% crispy form %}</h6>
                 </form>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="float-right mb-3">
-                    <a class="btn btn-outline-dark" href="{% url 'index' %}">戻る</a>
-                    {% if 'dupdate6' in request.get_full_path %}
-                        <a class="btn btn-outline-dark save" href="#">保存して終了</a>
-                    {% else %}
-                        <a class="btn btn-outline-dark save" href="#">保存して次の評価へ</a>
-                    {% endif %}
-                </div>
             </div>
         </div>
     </div>

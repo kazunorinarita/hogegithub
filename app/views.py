@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib import messages
+from django.db.models import Q
 
 import django_filters
 from django.shortcuts import render
@@ -70,6 +72,8 @@ from rules.contrib.views import PermissionRequiredMixin
 
 from guardian.shortcuts import get_objects_for_user
 from guardian.shortcuts import assign_perm
+
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 # 未ログインのユーザーにアクセスを許可する場合は、LoginRequiredMixinを継承から外してください。
 #
@@ -145,9 +149,9 @@ class ItemFilterView(LoginRequiredMixin, FilterView):
 
 
         if self.request.user.is_superuser: # スーパーユーザの場合、リストにすべてを表示する。
-            return Item.objects.all().order_by('-created_at')
+            return Item.objects.select_related('Itemkey').all().order_by('id')
         else:# 一般ユーザは自分のレコードのみ表示する。
-            return Item.objects.filter(created_by_id__in=key_list)
+            return Item.objects.filter(created_by_id__in=key_list).order_by('id')
 
         #    return Item.objects.filter(id=current_user.id)
         #    return Item.objects.filter(id__in=key1)
@@ -206,7 +210,22 @@ class ItemUpdateView_1(LoginRequiredMixin, UpdateView):
         item.updated_at = timezone.now()
         item.save()
 
+        entries = Item.objects.filter(updated_by = self.request.user ,
+                    Q1_1__gte='1', Q1_2__gte='1', Q1_3__gte='1', Q1_4__gte='1', Q1_5__gte='1',
+                    Q2_1__gte='1', Q2_2__gte='1', Q2_3__gte='1', Q2_4__gte='1', Q2_5__gte='1',
+                    Q3_1__gte='1', Q3_2__gte='1', Q3_3__gte='1', Q3_4__gte='1', Q3_5__gte='1',
+                    Q4_1__gte='1', Q4_2__gte='1', Q4_3__gte='1', Q4_4__gte='1', Q4_5__gte='1',
+                    Q5_1__gte='1', Q5_2__gte='1', Q5_3__gte='1', Q5_4__gte='1', Q5_5__gte='1',
+                    Q6_1__gte='1', Q6_2__gte='1', Q6_3__gte='1', Q6_4__gte='1', Q6_5__gte='1')
+        if entries:   
+            item.flag = 1
+            item.save()
+
         return redirect('update2', pk=item.pk)
+ 
+    def form_invalid(self, form):
+        messages.error(self.request, '【コミュニケーション力】（情報伝達・発信力）に対する未入力があります。')
+        return super().form_invalid(form)
 
 class ItemUpdateView_2(LoginRequiredMixin, UpdateView):
     """
@@ -225,7 +244,23 @@ class ItemUpdateView_2(LoginRequiredMixin, UpdateView):
         item.updated_at = timezone.now()
         item.save()
 
+        entries = Item.objects.filter(updated_by = self.request.user ,
+                    Q1_1__gte='1', Q1_2__gte='1', Q1_3__gte='1', Q1_4__gte='1', Q1_5__gte='1',
+                    Q2_1__gte='1', Q2_2__gte='1', Q2_3__gte='1', Q2_4__gte='1', Q2_5__gte='1',
+                    Q3_1__gte='1', Q3_2__gte='1', Q3_3__gte='1', Q3_4__gte='1', Q3_5__gte='1',
+                    Q4_1__gte='1', Q4_2__gte='1', Q4_3__gte='1', Q4_4__gte='1', Q4_5__gte='1',
+                    Q5_1__gte='1', Q5_2__gte='1', Q5_3__gte='1', Q5_4__gte='1', Q5_5__gte='1',
+                    Q6_1__gte='1', Q6_2__gte='1', Q6_3__gte='1', Q6_4__gte='1', Q6_5__gte='1')
+        if entries:   
+            item.flag = 1
+            item.save()
+
         return redirect('update3', pk=item.pk)
+
+
+    def form_invalid(self, form):
+        messages.error(self.request, '【責任感】に対する未入力があります。')
+        return super().form_invalid(form)
 
 class ItemUpdateView_3(LoginRequiredMixin, UpdateView):
     """
@@ -244,7 +279,22 @@ class ItemUpdateView_3(LoginRequiredMixin, UpdateView):
         item.updated_at = timezone.now()
         item.save()
 
+        entries = Item.objects.filter(updated_by = self.request.user ,
+                    Q1_1__gte='1', Q1_2__gte='1', Q1_3__gte='1', Q1_4__gte='1', Q1_5__gte='1',
+                    Q2_1__gte='1', Q2_2__gte='1', Q2_3__gte='1', Q2_4__gte='1', Q2_5__gte='1',
+                    Q3_1__gte='1', Q3_2__gte='1', Q3_3__gte='1', Q3_4__gte='1', Q3_5__gte='1',
+                    Q4_1__gte='1', Q4_2__gte='1', Q4_3__gte='1', Q4_4__gte='1', Q4_5__gte='1',
+                    Q5_1__gte='1', Q5_2__gte='1', Q5_3__gte='1', Q5_4__gte='1', Q5_5__gte='1',
+                    Q6_1__gte='1', Q6_2__gte='1', Q6_3__gte='1', Q6_4__gte='1', Q6_5__gte='1')
+        if entries:   
+            item.flag = 1
+            item.save()
+
         return redirect('update4', pk=item.pk)
+
+    def form_invalid(self, form):
+        messages.error(self.request, '【人材育成】に対する未入力があります。')
+        return super().form_invalid(form)
 
 class ItemUpdateView_4(LoginRequiredMixin, UpdateView):
     """
@@ -263,7 +313,23 @@ class ItemUpdateView_4(LoginRequiredMixin, UpdateView):
         item.updated_at = timezone.now()
         item.save()
 
+        entries = Item.objects.filter(updated_by = self.request.user ,
+                    Q1_1__gte='1', Q1_2__gte='1', Q1_3__gte='1', Q1_4__gte='1', Q1_5__gte='1',
+                    Q2_1__gte='1', Q2_2__gte='1', Q2_3__gte='1', Q2_4__gte='1', Q2_5__gte='1',
+                    Q3_1__gte='1', Q3_2__gte='1', Q3_3__gte='1', Q3_4__gte='1', Q3_5__gte='1',
+                    Q4_1__gte='1', Q4_2__gte='1', Q4_3__gte='1', Q4_4__gte='1', Q4_5__gte='1',
+                    Q5_1__gte='1', Q5_2__gte='1', Q5_3__gte='1', Q5_4__gte='1', Q5_5__gte='1',
+                    Q6_1__gte='1', Q6_2__gte='1', Q6_3__gte='1', Q6_4__gte='1', Q6_5__gte='1')
+        if entries:   
+            item.flag = 1
+            item.save()
+
         return redirect('update5', pk=item.pk)
+
+    def form_invalid(self, form):
+        messages.error(self.request, '【企画推進力】に対する未入力があります。')
+        return super().form_invalid(form)
+
 
 class ItemUpdateView_5(LoginRequiredMixin, UpdateView):
     """
@@ -282,7 +348,23 @@ class ItemUpdateView_5(LoginRequiredMixin, UpdateView):
         item.updated_at = timezone.now()
         item.save()
 
+        entries = Item.objects.filter(updated_by = self.request.user ,
+                    Q1_1__gte='1', Q1_2__gte='1', Q1_3__gte='1', Q1_4__gte='1', Q1_5__gte='1',
+                    Q2_1__gte='1', Q2_2__gte='1', Q2_3__gte='1', Q2_4__gte='1', Q2_5__gte='1',
+                    Q3_1__gte='1', Q3_2__gte='1', Q3_3__gte='1', Q3_4__gte='1', Q3_5__gte='1',
+                    Q4_1__gte='1', Q4_2__gte='1', Q4_3__gte='1', Q4_4__gte='1', Q4_5__gte='1',
+                    Q5_1__gte='1', Q5_2__gte='1', Q5_3__gte='1', Q5_4__gte='1', Q5_5__gte='1',
+                    Q6_1__gte='1', Q6_2__gte='1', Q6_3__gte='1', Q6_4__gte='1', Q6_5__gte='1')
+        if entries:   
+            item.flag = 1
+            item.save()
+
         return redirect('update6', pk=item.pk)
+
+    def form_invalid(self, form):
+        messages.error(self.request, '【経営感覚・経営貢献】に対する未入力があります。')
+        return super().form_invalid(form)
+
 
 class ItemUpdateView_6(LoginRequiredMixin, UpdateView):
     """
@@ -301,7 +383,24 @@ class ItemUpdateView_6(LoginRequiredMixin, UpdateView):
         item.updated_at = timezone.now()
         item.save()
 
+        entries = Item.objects.filter(updated_by = self.request.user ,
+                    Q1_1__gte='1', Q1_2__gte='1', Q1_3__gte='1', Q1_4__gte='1', Q1_5__gte='1',
+                    Q2_1__gte='1', Q2_2__gte='1', Q2_3__gte='1', Q2_4__gte='1', Q2_5__gte='1',
+                    Q3_1__gte='1', Q3_2__gte='1', Q3_3__gte='1', Q3_4__gte='1', Q3_5__gte='1',
+                    Q4_1__gte='1', Q4_2__gte='1', Q4_3__gte='1', Q4_4__gte='1', Q4_5__gte='1',
+                    Q5_1__gte='1', Q5_2__gte='1', Q5_3__gte='1', Q5_4__gte='1', Q5_5__gte='1',
+                    Q6_1__gte='1', Q6_2__gte='1', Q6_3__gte='1', Q6_4__gte='1', Q6_5__gte='1')
+        if entries:   
+            item.flag = 1
+            item.save()
+
+        messages.success(self.request, '更新内容を保存しました')
         return HttpResponseRedirect(self.success_url)
+
+    def form_invalid(self, form):
+        messages.error(self.request, '【マネジメント力・組織管理能力】に対する未入力があります。')
+        return super().form_invalid(form)
+
 
 class Item1UpdateView_1(LoginRequiredMixin, UpdateView):
     """
@@ -317,11 +416,29 @@ class Item1UpdateView_1(LoginRequiredMixin, UpdateView):
         自己評価処理
         """
         item = form.save(commit=False)
-        item.updated_by = self.request.user
+        item.updated_by1 = self.request.user
         item.updated_at = timezone.now()
+        key = item.created_by1_id
         item.save()
 
+        entries = Item1.objects.filter(created_by1 = key ,
+                    Q1_1__gte='1', Q1_2__gte='1', Q1_3__gte='1', Q1_4__gte='1', Q1_5__gte='1',
+                    Q2_1__gte='1', Q2_2__gte='1', Q2_3__gte='1', Q2_4__gte='1', Q2_5__gte='1',
+                    Q3_1__gte='1', Q3_2__gte='1', Q3_3__gte='1', Q3_4__gte='1', Q3_5__gte='1',
+                    Q4_1__gte='1', Q4_2__gte='1', Q4_3__gte='1', Q4_4__gte='1', Q4_5__gte='1',
+                    Q5_1__gte='1', Q5_2__gte='1', Q5_3__gte='1', Q5_4__gte='1', Q5_5__gte='1',
+                    Q6_1__gte='1', Q6_2__gte='1', Q6_3__gte='1', Q6_4__gte='1', Q6_5__gte='1')
+        if entries:   
+            item = Item.objects.get(created_by = key)
+            item.flag1 = 1
+            item.save()
+
         return redirect('update12', pk=item.pk)
+
+    def form_invalid(self, form):
+        messages.error(self.request, '【コミュニケーション力】（情報伝達・発信力）に対する未入力があります。')
+        return super().form_invalid(form)
+
 
 class Item1UpdateView_2(LoginRequiredMixin, UpdateView):
     """
@@ -336,11 +453,29 @@ class Item1UpdateView_2(LoginRequiredMixin, UpdateView):
         自己評価処理
         """
         item = form.save(commit=False)
-        item.updated_by = self.request.user
+        item.updated_by1 = self.request.user
         item.updated_at = timezone.now()
+        key = item.created_by1_id
         item.save()
 
+        entries = Item1.objects.filter(created_by1 = key ,
+                    Q1_1__gte='1', Q1_2__gte='1', Q1_3__gte='1', Q1_4__gte='1', Q1_5__gte='1',
+                    Q2_1__gte='1', Q2_2__gte='1', Q2_3__gte='1', Q2_4__gte='1', Q2_5__gte='1',
+                    Q3_1__gte='1', Q3_2__gte='1', Q3_3__gte='1', Q3_4__gte='1', Q3_5__gte='1',
+                    Q4_1__gte='1', Q4_2__gte='1', Q4_3__gte='1', Q4_4__gte='1', Q4_5__gte='1',
+                    Q5_1__gte='1', Q5_2__gte='1', Q5_3__gte='1', Q5_4__gte='1', Q5_5__gte='1',
+                    Q6_1__gte='1', Q6_2__gte='1', Q6_3__gte='1', Q6_4__gte='1', Q6_5__gte='1')
+        if entries:   
+            item = Item.objects.get(created_by = key)
+            item.flag1 = 1
+            item.save()
+
         return redirect('update13', pk=item.pk)
+
+    def form_invalid(self, form):
+        messages.error(self.request, '【責任感】に対する未入力があります。')
+        return super().form_invalid(form)
+
 
 class Item1UpdateView_3(LoginRequiredMixin, UpdateView):
     """
@@ -355,11 +490,29 @@ class Item1UpdateView_3(LoginRequiredMixin, UpdateView):
         自己評価処理
         """
         item = form.save(commit=False)
-        item.updated_by = self.request.user
+        item.updated_by1 = self.request.user
         item.updated_at = timezone.now()
+        key = item.created_by1_id
         item.save()
 
+        entries = Item1.objects.filter(created_by1 = key ,
+                    Q1_1__gte='1', Q1_2__gte='1', Q1_3__gte='1', Q1_4__gte='1', Q1_5__gte='1',
+                    Q2_1__gte='1', Q2_2__gte='1', Q2_3__gte='1', Q2_4__gte='1', Q2_5__gte='1',
+                    Q3_1__gte='1', Q3_2__gte='1', Q3_3__gte='1', Q3_4__gte='1', Q3_5__gte='1',
+                    Q4_1__gte='1', Q4_2__gte='1', Q4_3__gte='1', Q4_4__gte='1', Q4_5__gte='1',
+                    Q5_1__gte='1', Q5_2__gte='1', Q5_3__gte='1', Q5_4__gte='1', Q5_5__gte='1',
+                    Q6_1__gte='1', Q6_2__gte='1', Q6_3__gte='1', Q6_4__gte='1', Q6_5__gte='1')
+        if entries:   
+            item = Item.objects.get(created_by = key)
+            item.flag1 = 1
+            item.save()
+
         return redirect('update14', pk=item.pk)
+
+    def form_invalid(self, form):
+        messages.error(self.request, '【人材育成】に対する未入力があります。')
+        return super().form_invalid(form)
+
 
 class Item1UpdateView_4(LoginRequiredMixin, UpdateView):
     """
@@ -374,11 +527,28 @@ class Item1UpdateView_4(LoginRequiredMixin, UpdateView):
         自己評価処理
         """
         item = form.save(commit=False)
-        item.updated_by = self.request.user
+        item.updated_by1 = self.request.user
         item.updated_at = timezone.now()
+        key = item.created_by1_id
         item.save()
 
+        entries = Item1.objects.filter(created_by1 = key ,
+                    Q1_1__gte='1', Q1_2__gte='1', Q1_3__gte='1', Q1_4__gte='1', Q1_5__gte='1',
+                    Q2_1__gte='1', Q2_2__gte='1', Q2_3__gte='1', Q2_4__gte='1', Q2_5__gte='1',
+                    Q3_1__gte='1', Q3_2__gte='1', Q3_3__gte='1', Q3_4__gte='1', Q3_5__gte='1',
+                    Q4_1__gte='1', Q4_2__gte='1', Q4_3__gte='1', Q4_4__gte='1', Q4_5__gte='1',
+                    Q5_1__gte='1', Q5_2__gte='1', Q5_3__gte='1', Q5_4__gte='1', Q5_5__gte='1',
+                    Q6_1__gte='1', Q6_2__gte='1', Q6_3__gte='1', Q6_4__gte='1', Q6_5__gte='1')
+        if entries:   
+            item = Item.objects.get(created_by = key)
+            item.flag1 = 1
+            item.save()
+
         return redirect('update15', pk=item.pk)
+
+    def form_invalid(self, form):
+        messages.error(self.request, '【企画推進力】に対する未入力があります。')
+        return super().form_invalid(form)
 
 class Item1UpdateView_5(LoginRequiredMixin, UpdateView):
     """
@@ -393,11 +563,28 @@ class Item1UpdateView_5(LoginRequiredMixin, UpdateView):
         自己評価処理
         """
         item = form.save(commit=False)
-        item.updated_by = self.request.user
+        item.updated_by1 = self.request.user
         item.updated_at = timezone.now()
+        key = item.created_by1_id
         item.save()
 
+        entries = Item1.objects.filter(created_by1 = key ,
+                    Q1_1__gte='1', Q1_2__gte='1', Q1_3__gte='1', Q1_4__gte='1', Q1_5__gte='1',
+                    Q2_1__gte='1', Q2_2__gte='1', Q2_3__gte='1', Q2_4__gte='1', Q2_5__gte='1',
+                    Q3_1__gte='1', Q3_2__gte='1', Q3_3__gte='1', Q3_4__gte='1', Q3_5__gte='1',
+                    Q4_1__gte='1', Q4_2__gte='1', Q4_3__gte='1', Q4_4__gte='1', Q4_5__gte='1',
+                    Q5_1__gte='1', Q5_2__gte='1', Q5_3__gte='1', Q5_4__gte='1', Q5_5__gte='1',
+                    Q6_1__gte='1', Q6_2__gte='1', Q6_3__gte='1', Q6_4__gte='1', Q6_5__gte='1')
+        if entries:   
+            item = Item.objects.get(created_by = key)
+            item.flag1 = 1
+            item.save()
+
         return redirect('update16', pk=item.pk)
+
+    def form_invalid(self, form):
+        messages.error(self.request, '【経営感覚・経営貢献】に対する未入力があります。')
+        return super().form_invalid(form)
 
 class Item1UpdateView_6(LoginRequiredMixin, UpdateView):
     """
@@ -412,11 +599,29 @@ class Item1UpdateView_6(LoginRequiredMixin, UpdateView):
         自己評価処理
         """
         item = form.save(commit=False)
-        item.updated_by = self.request.user
+        item.updated_by1 = self.request.user
         item.updated_at = timezone.now()
+        key = item.created_by1_id
         item.save()
 
+        entries = Item1.objects.filter(created_by1 = key ,
+                    Q1_1__gte='1', Q1_2__gte='1', Q1_3__gte='1', Q1_4__gte='1', Q1_5__gte='1',
+                    Q2_1__gte='1', Q2_2__gte='1', Q2_3__gte='1', Q2_4__gte='1', Q2_5__gte='1',
+                    Q3_1__gte='1', Q3_2__gte='1', Q3_3__gte='1', Q3_4__gte='1', Q3_5__gte='1',
+                    Q4_1__gte='1', Q4_2__gte='1', Q4_3__gte='1', Q4_4__gte='1', Q4_5__gte='1',
+                    Q5_1__gte='1', Q5_2__gte='1', Q5_3__gte='1', Q5_4__gte='1', Q5_5__gte='1',
+                    Q6_1__gte='1', Q6_2__gte='1', Q6_3__gte='1', Q6_4__gte='1', Q6_5__gte='1')
+        if entries:   
+            item = Item.objects.get(created_by = key)
+            item.flag1 = 1
+            item.save()
+
+        messages.success(self.request, '更新内容を保存しました')
         return HttpResponseRedirect(self.success_url)
+
+    def form_invalid(self, form):
+        messages.error(self.request, '【マネジメント力・組織管理能力】に対する未入力があります。')
+        return super().form_invalid(form)
 
 class Item2UpdateView_1(LoginRequiredMixin, UpdateView):
     """
@@ -432,11 +637,28 @@ class Item2UpdateView_1(LoginRequiredMixin, UpdateView):
         自己評価処理
         """
         item = form.save(commit=False)
-        item.updated_by = self.request.user
+        item.updated_by2 = self.request.user
         item.updated_at = timezone.now()
+        key = item.created_by2_id
         item.save()
 
+        entries = Item2.objects.filter(created_by2 = key ,
+                    Q1_1__gte='1', Q1_2__gte='1', Q1_3__gte='1', Q1_4__gte='1', Q1_5__gte='1',
+                    Q2_1__gte='1', Q2_2__gte='1', Q2_3__gte='1', Q2_4__gte='1', Q2_5__gte='1',
+                    Q3_1__gte='1', Q3_2__gte='1', Q3_3__gte='1', Q3_4__gte='1', Q3_5__gte='1',
+                    Q4_1__gte='1', Q4_2__gte='1', Q4_3__gte='1', Q4_4__gte='1', Q4_5__gte='1',
+                    Q5_1__gte='1', Q5_2__gte='1', Q5_3__gte='1', Q5_4__gte='1', Q5_5__gte='1',
+                    Q6_1__gte='1', Q6_2__gte='1', Q6_3__gte='1', Q6_4__gte='1', Q6_5__gte='1')
+        if entries:   
+            item = Item.objects.get(created_by = key)
+            item.flag2 = 1
+            item.save()
+
         return redirect('update22', pk=item.pk)
+
+    def form_invalid(self, form):
+        messages.error(self.request, '【コミュニケーション力】（情報伝達・発信力）に対する未入力があります。')
+        return super().form_invalid(form)
 
 class Item2UpdateView_2(LoginRequiredMixin, UpdateView):
     """
@@ -451,11 +673,28 @@ class Item2UpdateView_2(LoginRequiredMixin, UpdateView):
         自己評価処理
         """
         item = form.save(commit=False)
-        item.updated_by = self.request.user
+        item.updated_by2 = self.request.user
         item.updated_at = timezone.now()
+        key = item.created_by2_id
         item.save()
 
+        entries = Item2.objects.filter(created_by2 = key ,
+                    Q1_1__gte='1', Q1_2__gte='1', Q1_3__gte='1', Q1_4__gte='1', Q1_5__gte='1',
+                    Q2_1__gte='1', Q2_2__gte='1', Q2_3__gte='1', Q2_4__gte='1', Q2_5__gte='1',
+                    Q3_1__gte='1', Q3_2__gte='1', Q3_3__gte='1', Q3_4__gte='1', Q3_5__gte='1',
+                    Q4_1__gte='1', Q4_2__gte='1', Q4_3__gte='1', Q4_4__gte='1', Q4_5__gte='1',
+                    Q5_1__gte='1', Q5_2__gte='1', Q5_3__gte='1', Q5_4__gte='1', Q5_5__gte='1',
+                    Q6_1__gte='1', Q6_2__gte='1', Q6_3__gte='1', Q6_4__gte='1', Q6_5__gte='1')
+        if entries:   
+            item = Item.objects.get(created_by = key)
+            item.flag2 = 1
+            item.save()
+
         return redirect('update23', pk=item.pk)
+
+    def form_invalid(self, form):
+        messages.error(self.request, '【責任感】に対する未入力があります。')
+        return super().form_invalid(form)
 
 class Item2UpdateView_3(LoginRequiredMixin, UpdateView):
     """
@@ -470,11 +709,28 @@ class Item2UpdateView_3(LoginRequiredMixin, UpdateView):
         自己評価処理
         """
         item = form.save(commit=False)
-        item.updated_by = self.request.user
+        item.updated_by2 = self.request.user
         item.updated_at = timezone.now()
+        key = item.created_by2_id
         item.save()
 
+        entries = Item2.objects.filter(created_by2 = key ,
+                    Q1_1__gte='1', Q1_2__gte='1', Q1_3__gte='1', Q1_4__gte='1', Q1_5__gte='1',
+                    Q2_1__gte='1', Q2_2__gte='1', Q2_3__gte='1', Q2_4__gte='1', Q2_5__gte='1',
+                    Q3_1__gte='1', Q3_2__gte='1', Q3_3__gte='1', Q3_4__gte='1', Q3_5__gte='1',
+                    Q4_1__gte='1', Q4_2__gte='1', Q4_3__gte='1', Q4_4__gte='1', Q4_5__gte='1',
+                    Q5_1__gte='1', Q5_2__gte='1', Q5_3__gte='1', Q5_4__gte='1', Q5_5__gte='1',
+                    Q6_1__gte='1', Q6_2__gte='1', Q6_3__gte='1', Q6_4__gte='1', Q6_5__gte='1')
+        if entries:   
+            item = Item.objects.get(created_by = key)
+            item.flag2 = 1
+            item.save()
+
         return redirect('update24', pk=item.pk)
+
+    def form_invalid(self, form):
+        messages.error(self.request, '【人材育成】に対する未入力があります。')
+        return super().form_invalid(form)
 
 class Item2UpdateView_4(LoginRequiredMixin, UpdateView):
     """
@@ -489,11 +745,28 @@ class Item2UpdateView_4(LoginRequiredMixin, UpdateView):
         自己評価処理
         """
         item = form.save(commit=False)
-        item.updated_by = self.request.user
+        item.updated_by2 = self.request.user
         item.updated_at = timezone.now()
+        key = item.created_by2_id
         item.save()
 
+        entries = Item2.objects.filter(created_by2 = key ,
+                    Q1_1__gte='1', Q1_2__gte='1', Q1_3__gte='1', Q1_4__gte='1', Q1_5__gte='1',
+                    Q2_1__gte='1', Q2_2__gte='1', Q2_3__gte='1', Q2_4__gte='1', Q2_5__gte='1',
+                    Q3_1__gte='1', Q3_2__gte='1', Q3_3__gte='1', Q3_4__gte='1', Q3_5__gte='1',
+                    Q4_1__gte='1', Q4_2__gte='1', Q4_3__gte='1', Q4_4__gte='1', Q4_5__gte='1',
+                    Q5_1__gte='1', Q5_2__gte='1', Q5_3__gte='1', Q5_4__gte='1', Q5_5__gte='1',
+                    Q6_1__gte='1', Q6_2__gte='1', Q6_3__gte='1', Q6_4__gte='1', Q6_5__gte='1')
+        if entries:   
+            item = Item.objects.get(created_by = key)
+            item.flag2 = 1
+            item.save()
+
         return redirect('update25', pk=item.pk)
+
+    def form_invalid(self, form):
+        messages.error(self.request, '【企画推進力】に対する未入力があります。')
+        return super().form_invalid(form)
 
 class Item2UpdateView_5(LoginRequiredMixin, UpdateView):
     """
@@ -508,11 +781,28 @@ class Item2UpdateView_5(LoginRequiredMixin, UpdateView):
         自己評価処理
         """
         item = form.save(commit=False)
-        item.updated_by = self.request.user
+        item.updated_by2 = self.request.user
         item.updated_at = timezone.now()
+        key = item.created_by2_id
         item.save()
 
+        entries = Item2.objects.filter(created_by2 = key ,
+                    Q1_1__gte='1', Q1_2__gte='1', Q1_3__gte='1', Q1_4__gte='1', Q1_5__gte='1',
+                    Q2_1__gte='1', Q2_2__gte='1', Q2_3__gte='1', Q2_4__gte='1', Q2_5__gte='1',
+                    Q3_1__gte='1', Q3_2__gte='1', Q3_3__gte='1', Q3_4__gte='1', Q3_5__gte='1',
+                    Q4_1__gte='1', Q4_2__gte='1', Q4_3__gte='1', Q4_4__gte='1', Q4_5__gte='1',
+                    Q5_1__gte='1', Q5_2__gte='1', Q5_3__gte='1', Q5_4__gte='1', Q5_5__gte='1',
+                    Q6_1__gte='1', Q6_2__gte='1', Q6_3__gte='1', Q6_4__gte='1', Q6_5__gte='1')
+        if entries:   
+            item = Item.objects.get(created_by = key)
+            item.flag2 = 1
+            item.save()
+
         return redirect('update26', pk=item.pk)
+
+    def form_invalid(self, form):
+        messages.error(self.request, '【経営感覚・経営貢献】に対する未入力があります。')
+        return super().form_invalid(form)
 
 class Item2UpdateView_6(LoginRequiredMixin, UpdateView):
     """
@@ -527,11 +817,29 @@ class Item2UpdateView_6(LoginRequiredMixin, UpdateView):
         自己評価処理
         """
         item = form.save(commit=False)
-        item.updated_by = self.request.user
+        item.updated_by2 = self.request.user
         item.updated_at = timezone.now()
+        key = item.created_by2_id
         item.save()
 
+        entries = Item2.objects.filter(created_by2 = key ,
+                    Q1_1__gte='1', Q1_2__gte='1', Q1_3__gte='1', Q1_4__gte='1', Q1_5__gte='1',
+                    Q2_1__gte='1', Q2_2__gte='1', Q2_3__gte='1', Q2_4__gte='1', Q2_5__gte='1',
+                    Q3_1__gte='1', Q3_2__gte='1', Q3_3__gte='1', Q3_4__gte='1', Q3_5__gte='1',
+                    Q4_1__gte='1', Q4_2__gte='1', Q4_3__gte='1', Q4_4__gte='1', Q4_5__gte='1',
+                    Q5_1__gte='1', Q5_2__gte='1', Q5_3__gte='1', Q5_4__gte='1', Q5_5__gte='1',
+                    Q6_1__gte='1', Q6_2__gte='1', Q6_3__gte='1', Q6_4__gte='1', Q6_5__gte='1')
+        if entries:   
+            item = Item.objects.get(created_by = key)
+            item.flag2 = 1
+            item.save()
+
+        messages.success(self.request, '更新内容を保存しました')
         return HttpResponseRedirect(self.success_url)
+
+    def form_invalid(self, form):
+        messages.error(self.request, '【マネジメント力・組織管理能力】に対する未入力があります。')
+        return super().form_invalid(form)
 
 class ItemDeleteView(LoginRequiredMixin, UpdateView):
     """
@@ -551,6 +859,7 @@ class ItemDeleteView(LoginRequiredMixin, UpdateView):
         item.save()
 
         return HttpResponseRedirect(self.success_url)
+
 
 
 class ItemUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
