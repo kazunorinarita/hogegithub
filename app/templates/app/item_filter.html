@@ -79,30 +79,126 @@
                                 <div class="col-12">
                                     <div class="float-right">
                                         {% if item.created_by_id == request.user.id %}
-                                            {% if item.flag == 1 %}
-                                                <a class="btn-sm btn-success rounded-pill " href="{% url 'update1' item.pk %}">【評価済】自己評価</a>
+                                            {% if item.Itemkey.job_type == "医師" %}
+                                                {% if item.Itemkey.title == "部長" %}
+                                                    {% if item.flag == 1 %}
+                                                        <a class="btn-sm btn-success rounded-pill " href="{% url 'update1_2' item.pk %}">【評価済】自己評価</a>
+                                                    {% else %}
+                                                        <a class="btn-sm btn-danger rounded-pill " href="{% url 'update1_2' item.pk %}">【未評価】自己評価</a>
+                                                    {% endif %}
+                                                {% else %}
+                                                    {% if item.Itemkey.title != "" %}
+                                                        {% if item.flag == 1 %}
+                                                            <a class="btn-sm btn-success rounded-pill " href="{% url 'update1' item.pk %}">【評価済】自己評価</a>
+                                                        {% else %}
+                                                            <a class="btn-sm btn-danger rounded-pill " href="{% url 'update1' item.pk %}">【未評価】自己評価</a>
+                                                        {% endif %}
+                                                    {% else %}
+                                                        {% if item.flag == 1 %}
+                                                            <a class="btn-sm btn-success rounded-pill " href="{% url 'update1_1' item.pk %}">【評価済】自己評価</a>
+                                                        {% else %}
+                                                            <a class="btn-sm btn-danger rounded-pill " href="{% url 'update1_1' item.pk %}">【未評価】自己評価</a>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% endif %}
                                             {% else %}
-                                                <a class="btn-sm btn-danger rounded-pill " href="{% url 'update1' item.pk %}">【未評価】自己評価</a>
+                                                {% if item.Itemkey.title != "" %}
+                                                    {% if item.flag == 1 %}
+                                                        <a class="btn-sm btn-success rounded-pill " href="{% url 'update1' item.pk %}">【評価済】自己評価</a>
+                                                    {% else %}
+                                                        <a class="btn-sm btn-danger rounded-pill " href="{% url 'update1' item.pk %}">【未評価】自己評価</a>
+                                                    {% endif %}
+                                                {% else %}
+                                                    {% if item.flag == 1 %}
+                                                        <a class="btn-sm btn-success rounded-pill " href="{% url 'update1_1' item.pk %}">【評価済】自己評価</a>
+                                                    {% else %}
+                                                        <a class="btn-sm btn-danger rounded-pill " href="{% url 'update1_1' item.pk %}">【未評価】自己評価</a>
+                                                    {% endif %}
+                                                {% endif %}
                                             {% endif %}
                                         {% endif %}
                                         {% if item.created_by_id != request.user.id %}
                                             {% if perms.app.change_item1 == True %}
                                             {% has_perm 'app.rules_view_item1' request.user item as rules_view_item1 %}
                                                 {% if rules_view_item1 %}
-                                                    {% if item.flag1 == 1 %}
-                                                        <a class="btn-sm btn-success " href="{% url 'update11' item.pk %}">【評価済】一次評価</a>
+                                                    {% if item.Itemkey.job_type == "医師" %}
+                                                        {% if item.Itemkey.title == "部長" %}
+                                                            {% if item.flag1 == 1 %}
+                                                                <a class="btn-sm btn-success " href="{% url 'update11_2' item.pk %}">【評価済】一次評価</a>
+                                                            {% else %}
+                                                                <a class="btn-sm btn-danger " href="{% url 'update11_2' item.pk %}">【未評価】一次評価</a>
+                                                            {% endif %}
+                                                        {% else %}
+                                                            {% if item.Itemkey.title != "" %}
+                                                                {% if item.flag1 == 1 %}
+                                                                    <a class="btn-sm btn-success " href="{% url 'update1_1' item.pk %}">【評価済】一次評価</a>
+                                                                {% else %}
+                                                                    <a class="btn-sm btn-danger " href="{% url 'update1_1' item.pk %}">【未評価】一次評価</a>
+                                                                {% endif %}
+                                                            {% else %}
+                                                                {% if item.flag1 == 1 %}
+                                                                    <a class="btn-sm btn-success " href="{% url 'update11_1' item.pk %}">【評価済】一次評価</a>
+                                                                {% else %}
+                                                                    <a class="btn-sm btn-danger " href="{% url 'update11_1' item.pk %}">【未評価】一次評価</a>
+                                                                {% endif %}
+                                                            {% endif %}
+                                                        {% endif %}
                                                     {% else %}
-                                                        <a class="btn-sm btn-danger " href="{% url 'update11' item.pk %}">【未評価】一次評価</a>
+                                                        {% if item.Itemkey.title != "" %}
+                                                            {% if item.flag1 == 1 %}
+                                                                <a class="btn-sm btn-success " href="{% url 'update11' item.pk %}">【評価済】一次評価</a>
+                                                            {% else %}
+                                                                <a class="btn-sm btn-danger " href="{% url 'update11' item.pk %}">【未評価】一次評価</a>
+                                                            {% endif %}
+                                                        {% else %}
+                                                            {% if item.flag1 == 1 %}
+                                                                <a class="btn-sm btn-success " href="{% url 'update11_1' item.pk %}">【評価済】一次評価</a>
+                                                            {% else %}
+                                                                <a class="btn-sm btn-danger " href="{% url 'update11_1' item.pk %}">【未評価】一次評価</a>
+                                                            {% endif %}
+                                                        {% endif %}
                                                     {% endif %}
                                                 {% endif %}
                                             {% endif %}
                                             {% if perms.app.change_item2 == True %}
                                             {% has_perm 'app.rules_add_item2' request.user item as rules_add_item2 %}
                                                 {% if rules_add_item2 %}
-                                                    {% if item.flag2 == 1 %}
-                                                        <a class="btn-sm btn-success " href="{% url 'update21' item.pk %}">【評価済】二次評価</a>
+                                                    {% if item.Itemkey.job_type == "医師" %}
+                                                        {% if item.Itemkey.title == "部長" %}
+                                                            {% if item.flag2 == 1 %}
+                                                                <a class="btn-sm btn-success " href="{% url 'update21_2' item.pk %}">【評価済】二次評価</a>
+                                                            {% else %}
+                                                                <a class="btn-sm btn-danger " href="{% url 'update21_2' item.pk %}">【未評価】二次評価</a>
+                                                            {% endif %}
+                                                        {% else %}
+                                                            {% if item.Itemkey.title != "" %}
+                                                                {% if item.flag2 == 1 %}
+                                                                    <a class="btn-sm btn-success " href="{% url 'update21' item.pk %}">【評価済】二次評価</a>
+                                                                {% else %}
+                                                                    <a class="btn-sm btn-danger " href="{% url 'update21' item.pk %}">【未評価】二次評価</a>
+                                                                {% endif %}
+                                                            {% else %}
+                                                                {% if item.flag2 == 1 %}
+                                                                    <a class="btn-sm btn-success " href="{% url 'update21_1' item.pk %}">【評価済】二次評価</a>
+                                                                {% else %}
+                                                                    <a class="btn-sm btn-danger " href="{% url 'update21_1' item.pk %}">【未評価】二次評価</a>
+                                                                {% endif %}
+                                                            {% endif %}
+                                                        {% endif %}
                                                     {% else %}
-                                                        <a class="btn-sm btn-danger " href="{% url 'update21' item.pk %}">【未評価】二次評価</a>
+                                                        {% if item.Itemkey.title != "" %}
+                                                            {% if item.flag2 == 1 %}
+                                                                <a class="btn-sm btn-success " href="{% url 'update21' item.pk %}">【評価済】二次評価</a>
+                                                            {% else %}
+                                                                <a class="btn-sm btn-danger " href="{% url 'update21' item.pk %}">【未評価】二次評価</a>
+                                                            {% endif %}
+                                                        {% else %}
+                                                            {% if item.flag2 == 1 %}
+                                                                <a class="btn-sm btn-success " href="{% url 'update21_1' item.pk %}">【評価済】二次評価</a>
+                                                            {% else %}
+                                                                <a class="btn-sm btn-danger " href="{% url 'update21_1' item.pk %}">【未評価】二次評価</a>
+                                                            {% endif %}
+                                                        {% endif %}
                                                     {% endif %}
                                                 {% endif %}
                                             {% endif %}

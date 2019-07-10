@@ -2,6 +2,12 @@ from django.db import models
 from .models import Item
 from .models import Item1
 from .models import Item2
+from .models import Item3
+from .models import Item4
+from .models import Item5
+from .models import Item6
+from .models import Item7
+from .models import Item8
 
 import rules
 import guardian

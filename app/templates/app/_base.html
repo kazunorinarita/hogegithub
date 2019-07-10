@@ -1,7 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
     <!-- Required meta tags always come first -->
     <meta charset="utf-8">
@@ -17,8 +16,8 @@
     <link href="{% static "app/css/app.css" %}" rel="stylesheet">
 </head>
 
-<body>
-<nav class="navbar navbar-expand-md navbar-light bg-light ">
+<div class="fixed-top">
+    <nav class="navbar navbar-expand-md navbar-light bg-light">
     <a class="navbar-brand" href="#">コンピテンシー評価</a>
     <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#Navber" aria-controls="Navber"
             aria-expanded="false"
@@ -28,10 +27,11 @@
     <div class="collapse navbar-collapse justify-content-end" id="Navber">
         <ul class="navbar-nav">
             <li class="nav-item">
+                <input name="next" type="hidden" value="{{ request.path }}"> 
                 {% if request.user.is_superuser %}
                     <a class="nav-link" href="{% url 'admin:index' %}">管理画面</a>
                 {% else %}
-                    <a class="nav-link" href="{% url 'admin:index' %}">パスワード変更</a>
+                    <a class="nav-link" href="{% url 'admin:password_change' %}">パスワード変更</a>
                 {% endif %}
             </li>
         </ul>
@@ -42,13 +42,14 @@
         </ul>
     </div>
 </nav>
-{% if messages %}
+</div>
+<!--{% if messages %}
 <ul class="alert alert-warning">
     {% for message in messages %}
         <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
     {% endfor %}
 </ul>
-{% endif %}
+{% endif %}-->
 {% block content %}
 {% endblock %}
 
