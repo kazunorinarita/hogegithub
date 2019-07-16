@@ -96,6 +96,8 @@ from .forms import Item25Form_2
 from .forms import Item26Form_2
 from .models import Item8
 
+from django.db.models import Count
+
 from users.models import User
 
 #from django.contrib.auth.models import User
@@ -132,6 +134,11 @@ from operator import itemgetter
 import itertools
 import operator
 
+from datetime import datetime, date, time, timedelta
+import csv
+import urllib
+from django.http import HttpResponse
+
 # 未ログインのユーザーにアクセスを許可する場合は、LoginRequiredMixinを継承から外してください。
 #
 # LoginRequiredMixin：未ログインのユーザーをログイン画面に誘導するMixin
@@ -149,7 +156,6 @@ class ItemFilterView(LoginRequiredMixin, FilterView):
     ・django-filter 一覧画面(ListView)に検索機能を追加
     https://django-filter.readthedocs.io/en/master/
     """
-
     #model = Item
     model = Item
     # django-filter 設定
@@ -167,10 +173,8 @@ class ItemFilterView(LoginRequiredMixin, FilterView):
         リクエスト受付
         セッション変数の管理:一覧画面と詳細画面間の移動時に検索条件が維持されるようにする。
         """
-
         if self.request.user.updated_at == None: 
            return HttpResponseRedirect(reverse('password_change',args=request))
-
         # 一覧画面内の遷移(GETクエリがある)ならクエリを保存する
         if request.GET:
             request.session['query'] = request.GET
@@ -180,7 +184,6 @@ class ItemFilterView(LoginRequiredMixin, FilterView):
             if 'query' in request.session.keys():
                 for key in request.session['query'].keys():
                     request.GET[key] = request.session['query'][key]
-
         return super().get(request, **kwargs)
 
     def get_queryset(self):
@@ -320,6 +323,70 @@ class ItemFilterView(LoginRequiredMixin, FilterView):
         #    return item_out
         #    return Item.objects.filter(id=current_user.id)
         #    return Item.objects.filter(id__in=key1)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        """
+        表示データの設定
+        """
+        # 表示データを追加したい場合は、ここでキーを追加しテンプレート上で表示する
+        # 例：kwargs['sample'] = 'sample'
+        return super().get_context_data(object_list=object_list, **kwargs)
+
+class ItemlistView(LoginRequiredMixin, ListView):
+    """
+    ビュー：一覧表示画面
+
+    以下のパッケージを使用
+    ・django-filter 一覧画面(ListView)に検索機能を追加
+    https://django-filter.readthedocs.io/en/master/
+    """
+    #model = Item
+    model = Item
+    template_name = "item_list.html"
+    # django-filter 設定
+    filterset_class = ItemFilterSet
+    # django-filter ver2.0対応 クエリ未設定時に全件表示する設定
+    strict = False
+
+    num_chairs = 0
+
+    # 1ページの表示
+    paginate_by = 10
+
+    def get(self, request, **kwargs):
+        """
+        リクエスト受付
+        セッション変数の管理:一覧画面と詳細画面間の移動時に検索条件が維持されるようにする。
+        """
+        if self.request.user.updated_at == None: 
+           return HttpResponseRedirect(reverse('password_change',args=request))
+        # 一覧画面内の遷移(GETクエリがある)ならクエリを保存する
+        if request.GET:
+            request.session['query'] = request.GET
+        # 詳細画面・登録画面からの遷移(GETクエリはない)ならクエリを復元する
+        else:
+            request.GET = request.GET.copy()
+            if 'query' in request.session.keys():
+                for key in request.session['query'].keys():
+                    request.GET[key] = request.session['query'][key]
+        return super().get(request, **kwargs)
+
+    def get_queryset(self):
+        """
+        ソート順・デフォルトの絞り込みを指定
+        """
+        #item_out = Item.objects.select_related('Itemkey').values('Itemkey__department').annotate(total=Count('id'))
+        #item_out = Item.objects.select_related('Itemkey').values('Itemkey__department').annotate(total1=Count('id')).filter(flag='1')
+        #item_out = Item.objects.select_related('Itemkey').values('Itemkey__department').aggregate(selfcount1=Count('id',filter=Q(flag='1')),selfcount2=Count('id',filter=Q(flag='')))
+        item_out = Item.objects.select_related('Itemkey').values('Itemkey__department').annotate(count1=Count('Itemkey__department'),selfcount=Count('Itemkey__department',filter=Q(flag='1')),primarycount=Count('Itemkey__department',filter=Q(flag1='1')),secondarycount=Count('Itemkey__department',filter=Q(flag2='1')))
+        #item_out1 = item_out.values('Itemkey_set.department').annotate(ken=Count('id'))
+        #return item_out.all()
+        return item_out.all().order_by('Itemkey__department')
+
+        #if self.request.user.is_superuser: # スーパーユーザの場合、リストにすべてを表示する。
+        #    return Item.objects.all().order_by('keyname')
+        #else:# 一般ユーザは自分のレコードのみ表示する。
+        #    return item_out.all().order_by('keyname')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         """
@@ -2376,6 +2443,7 @@ class ItemUpdateView_7_1(LoginRequiredMixin, UpdateView):
         item = form.save(commit=False)
         item.updated_by3 = self.request.user
         item.updated_at = timezone.now()
+        key = item.created_by3_id
         item.save()
 
         entries = Item3.objects.filter(updated_by3 = self.request.user ,
@@ -2519,3 +2587,51 @@ class Item2UpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
     form_class = Item1Form
     success_url = reverse_lazy('index')
     permission_required = 'app.rules_change_item2'
+
+def PostExport(request):
+    t = date.today()
+#    output_path = '/'
+#    output_name = date.today() + t.strftime('%Y%m') + '_competency.csv'
+
+# 検索対象レコードの抽出
+#    order_list = Item.objects.all()
+
+# CSV出力処理開始
+    response = HttpResponse(content_type='text/csv; charset=Shift-JIS')
+#    filename = urllib.parse.quote((u'CSVファイル.csv').encode("utf8"))
+    filename = t.strftime('%Y%m%d') + '_competency.csv'
+    response['Content-Disposition'] = 'attachment; filename*=UTF-8\'\'{}'.format(filename)
+    #    # 1行目にヘッダーを書き込む
+    header = ['社員No', '氏名', '所属名', '職種', '役職名', '自己評価', '一次評価', '二次評価']
+    writer = csv.writer(response)
+    writer.writerow(header)
+    for post in Item.objects.select_related('Itemkey').all():
+        if post.flag:
+            post.flag = '済'
+        else:
+            post.flag = '未'
+        if post.flag1:
+            post.flag1 = '済'
+        else:
+            post.flag1 = '未'
+        if post.flag2:
+            post.flag2 = '済'
+        else:
+            post.flag2 = '未'
+        writer.writerow([post.Itemkey.username,post.name,post.Itemkey.department,post.Itemkey.job_type,post.Itemkey.title,post.flag,post.flag1,post.flag2])
+    return response
+
+    #with open(output_path + output_name, 'w', encoding='cp932', newline='') as response:
+    #    # 1行目にヘッダーを書き込む
+    #    header = ['氏名', '自己評価', '一次評価', '二次評価']
+    #    writer = csv.writer(response, quoting=csv.QUOTE_ALL)
+    #    writer.writerow(header)
+
+    #for order in order_list:
+    #    order_name = order.name
+    #    order_self = order.flag
+    #    order_primary = order.flag1
+    #    order_secondary = order.flag2
+    #    row = []
+    #    row += [order_name, order_self, order_primary, order_secondary]
+    #    writer.writerow(row)

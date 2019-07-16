@@ -1,48 +1,45 @@
 {% extends "./_base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-    {{ form.certifications.errors }}
-    {% if messages %}
-        <ul class="alert alert-warning">
-            {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
     <div class="sticky-top">
         <table class="sticky_table">
-            <div class="col-14">
-                {% if item3.name != null %}
-                    <h5 class="text-center">{{ item3.name }}　さんの自己評価</h5>
+            {{ form.certifications.errors }}
+            {% if item3.name != null %}
+                {% if 'update1_1' in request.get_full_path %}
+                    <h2 class="badge-center badge-primary text-center"><br><br>{{ item3.name }}　さんの自己評価<br><small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h4>コミュニケーション力（情報伝達・発信力）</h4><small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h6>患者・利用者・同僚の言いたいことを聴く力。<br>自分の考えを患者・利用者・同僚に応じてわかりやすく的確に伝えられる。<br>信頼関係を築く力・察する力</h6></div></small></h2>
                 {% endif %}
-            </div>
-            {% if 'update1_1' in request.get_full_path %}
-                <h4 class="badge-center badge-primary text-center"><br>コミュニケーション力（情報伝達・発信力）<small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h6>患者・利用者・同僚の言いたいことを聴く力。<br>自分の考えを患者・利用者・同僚に応じてわかりやすく的確に伝えられる。<br>信頼関係を築く力・察する力</div></h6></small></h4>
+                {% if 'update2_1' in request.get_full_path %}
+                    <h2 class="badge-center badge-primary text-center"><br><br>{{ item3.name }}　さんの自己評価<br><small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h4>チームワーク</h4><small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h6>同じ目標に向かって、団結し、協働しながら成果を出す力</h6></div></small></h2>
+                {% endif %}
+                {% if 'update3_1' in request.get_full_path %}
+                    <h2 class="badge-center badge-primary text-center"><br><br>{{ item3.name }}　さんの自己評価<br><small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h4>向上心</h4><small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h6>現状に満足せず、より高いスキルを身につけることや自己の成長のために努力する力</h6></div></small></h2>
+                {% endif %}
+                {% if 'update4_1' in request.get_full_path %}
+                    <h2 class="badge-center badge-primary text-center"><br><br>{{ item3.name }}　さんの自己評価<br><small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h4>行動力</h4><small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h6>自らの意思で積極的に行動をおこす力。</h6></div></small></h2>
+                {% endif %}
+                {% if 'update5_1' in request.get_full_path %}
+                    <h2 class="badge-center badge-primary text-center"><br><br>{{ item3.name }}　さんの自己評価<br><small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h4>柔軟性</h4><small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h6>その場その場で機転を利かせて行動する力<br>どのような場面でも変化に応じて適切な判断、対応ができる力</h6></div></small></h2>
+                {% endif %}
+                {% if 'update6_1' in request.get_full_path %}
+                    <h2 class="badge-center badge-primary text-center"><br><br>{{ item3.name }}　さんの自己評価<br><small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h4>責任感</h4><small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h6>自己の責任を理解し、それを果たそうとする力</h6></div></small></h2>
+                {% endif %}
+                {% if 'update7_1' in request.get_full_path %}
+                    <h2 class="badge-center badge-primary text-center"><br><br>{{ item3.name }}　さんの自己評価<br><small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h4>社会人基礎力チェック</h4><small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h6>自己の責任を理解し、それを果たそうとする力</h6></div></small></h2>
+                {% endif %}
             {% endif %}
-            {% if 'update2_1' in request.get_full_path %}
-                <h4 class="badge-center badge-primary text-center"><br>チームワーク<small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h6>同じ目標に向かって、団結し、協働しながら成果を出す力</div></h6></small></h4>
-            {% endif %}
-            {% if 'update3_1' in request.get_full_path %}
-                <h4 class="badge-center badge-primary text-center"><br>向上心<small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h6>現状に満足せず、より高いスキルを身につけることや自己の成長のために努力する力</div></h6></small></h4>
-            {% endif %}
-            {% if 'update4_1' in request.get_full_path %}
-                <h4 class="badge-center badge-primary text-center"><br>行動力<small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h6>自らの意思で積極的に行動をおこす力。</div></h6></small></h4>
-            {% endif %}
-            {% if 'update5_1' in request.get_full_path %}
-                <h4 class="badge-center badge-primary text-center"><br>柔軟性<small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h6>その場その場で機転を利かせて行動する力<br>どのような場面でも変化に応じて適切な判断、対応ができる力</div></h6></small></h4>
-            {% endif %}
-            {% if 'update6_1' in request.get_full_path %}
-                <h4 class="badge-center badge-primary text-center"><br>責任感<small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h6>自己の責任を理解し、それを果たそうとする力</div></h6></small></h4>
-            {% endif %}
-            {% if 'update7_1' in request.get_full_path %}
-                <h4 class="badge-center badge-primary text-center"><br>社会人基礎力チェック<small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h6>自己の責任を理解し、それを果たそうとする力</div></h6></small></h4>
-            {% endif %}
+            {% if messages %}
+                <ul class="alert alert-warning">
+                    {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}    
         </table>
     </div>
     <div class="mb-auto">
             <div class="jumbotron jumbotron-extend">
                 <form method="post" id="myform">
-                    <h8 class="text-left"><div class="ml-5">{% crispy form %}</div></h8>
+                    <h5 class="text-left"><div class="font-weight-bold">{% crispy form %}</div></h5>
                 </form>
             </div>
     </div>

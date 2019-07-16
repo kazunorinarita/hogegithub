@@ -10,7 +10,7 @@ from .models import Item6
 from .models import Item7
 from .models import Item8
 
-from .views import ItemFilterView,ItemCreateView,ItemDeleteView, \
+from .views import ItemFilterView,ItemlistView,PostExport,ItemCreateView,ItemDeleteView, \
                    ItemUpdateView_1, ItemUpdateView_2, ItemUpdateView_3, ItemUpdateView_4, ItemUpdateView_5, ItemUpdateView_6, \
                    Item1UpdateView_1, Item1UpdateView_2, Item1UpdateView_3, Item1UpdateView_4, Item1UpdateView_5, Item1UpdateView_6, \
                    Item2UpdateView_1, Item2UpdateView_2, Item2UpdateView_3, Item2UpdateView_4, Item2UpdateView_5, Item2UpdateView_6, \
@@ -95,6 +95,8 @@ urlpatterns = [
 
     path('create/', ItemCreateView.as_view(), name='create'),
     path('delete/<int:pk>/', ItemDeleteView.as_view(), name='delete'),
+    path('list/',ItemlistView.as_view(), name='list'),
+    path('export/',PostExport, name='output_csv'),
     path('', ItemFilterView.as_view(), name='index'),
     path('', views.index),
     path('admin/password_change/', auth_views.PasswordChangeView.as_view(), name='password_change'),

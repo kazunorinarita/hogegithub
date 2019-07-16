@@ -1,45 +1,42 @@
 {% extends "./_base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-    {{ form.certifications.errors }}
-    {% if messages %}
-        <ul class="alert alert-warning">
-            {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
     <div class="sticky-top">
         <table class="sticky_table">
-            <div class="col-14">
-                {% if item7.name != null %}
-                    <h5 class="text-center">{{ item7.name }}　さんの一次評価</h5>
+            {{ form.certifications.errors }}
+            {% if item7.name != null %}
+                {% if 'update11_2' in request.get_full_path %}
+                    <h2 class="badge-center badge-primary text-center"><br><br>{{ item7.name }}　さんの自己評価<br><small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h4>コミュニケーション力（情報伝達・発信力）</h4><small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h6>自分の考えを相手に応じてわかりやすく的確に伝えられる。<br>組織において必要な情報を、的確にわかりやすく正確に伝える力。<br>自己の理論や企画を実行に移すために、関係者を説得、調整する力</h6></div></small></h2>
+                    {% endif %}
+                {% if 'update12_2' in request.get_full_path %}
+                    <h2 class="badge-center badge-primary text-center"><br><br>{{ item7.name }}　さんの自己評価<br><small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h4>責任感</h4><small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h6>自己の責任を意識しそれを果たそうとする力</h6></div></small></h2>
+                    {% endif %}
+                {% if 'update13_2' in request.get_full_path %}
+                    <h2 class="badge-center badge-primary text-center"><br><br>{{ item7.name }}　さんの自己評価<br><small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h4>診療に対する熱意（自己研鑽・倫理観・顧客思考）<small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h6>現状に満足することなく、自分自身、自部署、組織の成長を常に意識した行動ができる力</h6></div></small></h2>
+                    {% endif %}
+                {% if 'update14_2' in request.get_full_path %}
+                    <h2 class="badge-center badge-primary text-center"><br><br>{{ item7.name }}　さんの自己評価<br><small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h4>チャレンジ精神</h4><small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h6>より高い課題、ハードルに挑戦し克服していこうとする姿勢</h6></div></small></h2>
+                    {% endif %}
+                {% if 'update15_2' in request.get_full_path %}
+                    <h2 class="badge-center badge-primary text-center"><br><br>{{ item7.name }}　さんの自己評価<br><small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h4>経営感覚</h4><small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h6>業績に関心を持ち自部署だけでなく法人の利益のための広い視野で物事を考える力</h6></div></small></h2>
                 {% endif %}
-            </div>
-            {% if 'update11_2' in request.get_full_path %}
-                <h4 class="badge-center badge-primary text-center"><br>コミュニケーション力（情報伝達・発信力）<small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h6>自分の考えを相手に応じてわかりやすく的確に伝えられる。<br>組織において必要な情報を、的確にわかりやすく正確に伝える力。<br>自己の理論や企画を実行に移すために、関係者を説得、調整する力</div></h6></small></h4>
+                {% if 'update16_2' in request.get_full_path %}
+                    <h2 class="badge-center badge-primary text-center"><br><br>{{ item7.name }}　さんの自己評価<br><small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h4>チーム医療（柔軟性・協調性）</h4><small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h6>チームメンバーのやる気と生産性を高め、目標を達成する力<br>主観的な視点だけでなく、客観的、大局的に物事を捉える力</h6></div></small></h2>
+                {% endif %}
             {% endif %}
-            {% if 'update12_2' in request.get_full_path %}
-                <h4 class="badge-center badge-primary text-center"><br>責任感<small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h6>自己の責任を意識しそれを果たそうとする力</div></h6></small></h4>
-            {% endif %}
-            {% if 'update13_2' in request.get_full_path %}
-                <h4 class="badge-center badge-primary text-center"><br>診療に対する熱意（自己研鑽・倫理観・顧客思考）<small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h6>現状に満足することなく、自分自身、自部署、組織の成長を常に意識した行動ができる力</div></h6></small></h4>
-            {% endif %}
-            {% if 'update14_2' in request.get_full_path %}
-                <h4 class="badge-center badge-primary text-center"><br>チャレンジ精神<small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h6>より高い課題、ハードルに挑戦し克服していこうとする姿勢</div></h6></small></h4>
-            {% endif %}
-            {% if 'update15_2' in request.get_full_path %}
-                <h4 class="badge-center badge-primary text-center"><br>経営感覚<small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h6>業績に関心を持ち自部署だけでなく法人の利益のための広い視野で物事を考える力</div></h6></small></h4>
-            {% endif %}
-            {% if 'update16_2' in request.get_full_path %}
-                <h4 class="badge-center badge-primary text-center"><br>チーム医療（柔軟性・協調性）<small class="text-muted"><div class="p-0 mb-2 badge-primary text-white"><h6>チームメンバーのやる気と生産性を高め、目標を達成する力<br>主観的な視点だけでなく、客観的、大局的に物事を捉える力</div></h6></small></h4>
-            {% endif %}
+            {% if messages %}
+                <ul class="alert alert-warning">
+                    {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}    
         </table>
     </div>
     <div class="mb-auto">
             <div class="jumbotron jumbotron-extend">
                 <form method="post" id="myform">
-                    <h8 class="text-left"><div class="ml-5">{% crispy form %}</div></h8>
+                    <h5 class="text-left"><div class="font-weight-bold">{% crispy form %}</div></h5>
                 </form>
             </div>
     </div>

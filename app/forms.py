@@ -535,7 +535,7 @@ class Item6Form_2(forms.ModelForm):
                   }
 class Item11Form_2(forms.ModelForm):
     class Meta:
-        model = Item6
+        model = Item7
         fields = ("Q1_1", "Q1_2", "Q1_3", "Q1_4", "Q1_5")
         widgets = {
                     "Q1_1": forms.RadioSelect(),
@@ -546,7 +546,7 @@ class Item11Form_2(forms.ModelForm):
                   }
 class Item12Form_2(forms.ModelForm):
     class Meta:
-        model = Item6
+        model = Item7
         fields = ("Q2_1", "Q2_2", "Q2_3", "Q2_4", "Q2_5")
         widgets = {
                     "Q2_1": forms.RadioSelect(),
@@ -557,7 +557,7 @@ class Item12Form_2(forms.ModelForm):
                   }
 class Item13Form_2(forms.ModelForm):
     class Meta:
-        model = Item6
+        model = Item7
         fields = ("Q3_1", "Q3_2", "Q3_3", "Q3_4", "Q3_5")
         widgets = {
                     "Q3_1": forms.RadioSelect(),
@@ -568,7 +568,7 @@ class Item13Form_2(forms.ModelForm):
                   }
 class Item14Form_2(forms.ModelForm):
     class Meta:
-        model = Item6
+        model = Item7
         fields = ("Q4_1", "Q4_2", "Q4_3", "Q4_4", "Q4_5")
         widgets = {
                     "Q4_1": forms.RadioSelect(),
@@ -579,7 +579,7 @@ class Item14Form_2(forms.ModelForm):
                   }
 class Item15Form_2(forms.ModelForm):
     class Meta:
-        model = Item6
+        model = Item7
         fields = ("Q5_1", "Q5_2", "Q5_3", "Q5_4", "Q5_5")
         widgets = {
                     "Q5_1": forms.RadioSelect(),
@@ -590,7 +590,7 @@ class Item15Form_2(forms.ModelForm):
                   }
 class Item16Form_2(forms.ModelForm):
     class Meta:
-        model = Item6
+        model = Item7
         fields = ("Q6_1", "Q6_2", "Q6_3", "Q6_4", "Q6_5")
         widgets = {
                     "Q6_1": forms.RadioSelect(),
@@ -601,7 +601,7 @@ class Item16Form_2(forms.ModelForm):
                   }
 class Item21Form_2(forms.ModelForm):
     class Meta:
-        model = Item6
+        model = Item8
         fields = ("Q1_1", "Q1_2", "Q1_3", "Q1_4", "Q1_5")
         widgets = {
                     "Q1_1": forms.RadioSelect(),
@@ -612,7 +612,7 @@ class Item21Form_2(forms.ModelForm):
                   }
 class Item22Form_2(forms.ModelForm):
     class Meta:
-        model = Item6
+        model = Item8
         fields = ("Q2_1", "Q2_2", "Q2_3", "Q2_4", "Q2_5")
         widgets = {
                     "Q2_1": forms.RadioSelect(),
@@ -623,7 +623,7 @@ class Item22Form_2(forms.ModelForm):
                   }
 class Item23Form_2(forms.ModelForm):
     class Meta:
-        model = Item6
+        model = Item8
         fields = ("Q3_1", "Q3_2", "Q3_3", "Q3_4", "Q3_5")
         widgets = {
                     "Q3_1": forms.RadioSelect(),
@@ -634,7 +634,7 @@ class Item23Form_2(forms.ModelForm):
                   }
 class Item24Form_2(forms.ModelForm):
     class Meta:
-        model = Item6
+        model = Item8
         fields = ("Q4_1", "Q4_2", "Q4_3", "Q4_4", "Q4_5")
         widgets = {
                     "Q4_1": forms.RadioSelect(),
@@ -645,7 +645,7 @@ class Item24Form_2(forms.ModelForm):
                   }
 class Item25Form_2(forms.ModelForm):
     class Meta:
-        model = Item6
+        model = Item8
         fields = ("Q5_1", "Q5_2", "Q5_3", "Q5_4", "Q5_5")
         widgets = {
                     "Q5_1": forms.RadioSelect(),
@@ -656,7 +656,7 @@ class Item25Form_2(forms.ModelForm):
                   }
 class Item26Form_2(forms.ModelForm):
     class Meta:
-        model = Item6
+        model = Item8
         fields = ("Q6_1", "Q6_2", "Q6_3", "Q6_4", "Q6_5")
         widgets = {
                     "Q6_1": forms.RadioSelect(),

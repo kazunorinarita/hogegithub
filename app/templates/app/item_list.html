@@ -3,6 +3,7 @@
 {% load crispy_forms_tags %}
 {% load guardian_tags %}
 {% load rules %}
+{% load utils %}
 <div class="container">
     <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
@@ -39,15 +40,8 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-10">
-                {% for item in item_list %}
-                    {% if item.created_by_id == request.user.id %}
-                        {% if item.Itemkey.department == "人事課" %}
-                            <a class="nav-link text-end" href="{% url 'list' %}"><br>入力状況確認</a>
-                        {% endif %}
-                    {% endif %}        
-                {% endfor %}
-        </div>
+        <a class="class= col-6 nav-link text-end" href="{% url 'index' %}"><br>評価サイト</a>
+        <a class="class= col-6 nav-link text-right" href="{% url 'output_csv' %}"><br>ダウンロード</a>
     </div>        
     <div class="row mt-3">
         <div class="col-10 mx-auto">
@@ -62,28 +56,34 @@
                         {# item_detail_contents.html を参考に必要な項目を追加してください #}
                             <div class="row">
                                 <div class="col-1 col-sm-1">
-                                    <p>氏名</p>
+                                    <p> 所属</p>
                                 </div>
                                 <div class="col-2 col-sm-2">
-                                    <p>{{ item.Itemkey }}</p>
-                                </div>
-                                <div class="col-0.5 col-sm-0.5">
-                                    <p>所属</p>
-                                </div>
-                                <div class="col-2 col-sm-2">
-                                    <p>{{ item.Itemkey.department }}</p>
-                                </div>
-                                <div class="col-0.5 col-sm-0.5">
-                                    <p>職種</p>
-                                </div>
-                                <div class="col-2 col-sm-2">
-                                    <p>{{ item.Itemkey.job_type }}</p>
-                                </div>
-                                <div class="col-0.5 col-sm-0.5">
-                                    <p>役職</p>
+                                    <p>{{ item.Itemkey__department }}</p>
                                 </div>
                                 <div class="col-1 col-sm-1">
-                                    <p>{{ item.Itemkey.title }}</p>
+                                    <p>人数</p>
+                                </div>
+                                <div class="col-1 col-sm-1">
+                                    <p>{{ item.count1 }}</p>
+                                </div>
+                                <div class="col-1.5 col-sm-1.5">
+                                    <p>自己評価</p>
+                                </div>
+                                <div class="col-1 col-sm-1">
+                                    <p>{{ item.selfcount|div:item.count1|floatformat:0 }}%</p>
+                                </div>
+                                <div class="col-1.5 col-sm-1.5">
+                                    <p>一次評価</p>
+                                </div>
+                                <div class="col-1 col-sm-1">
+                                    <p>{{ item.primarycount|div:item.count1|floatformat:0 }}%</p>
+                                </div>
+                                <div class="col-1.5 col-sm-1.5">
+                                    <p>二次評価</p>
+                                </div>
+                                <div class="col-1 col-sm-1">
+                                    <p>{{ item.secondarycount|div:item.count1|floatformat:0 }}%</p>
                                 </div>
                             </div>
                         <div class="row">
@@ -220,7 +220,7 @@
                     </li>
                 {% empty %}
                     <li class="list-group-item">
-                        対象のデータがありません
+                        対象2のデータがありません
                     </li>
                 {% endfor %}
             </ul>
