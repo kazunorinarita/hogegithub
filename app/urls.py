@@ -10,7 +10,7 @@ from .models import Item6
 from .models import Item7
 from .models import Item8
 
-from .views import ItemFilterView,ItemlistView,PostExport,ItemCreateView,ItemDeleteView, \
+from .views import ItemFilterView,ItemlistView,PostExport,PasswordChange,PasswordChangeDone,ItemCreateView,ItemDeleteView, \
                    ItemUpdateView_1, ItemUpdateView_2, ItemUpdateView_3, ItemUpdateView_4, ItemUpdateView_5, ItemUpdateView_6, \
                    Item1UpdateView_1, Item1UpdateView_2, Item1UpdateView_3, Item1UpdateView_4, Item1UpdateView_5, Item1UpdateView_6, \
                    Item2UpdateView_1, Item2UpdateView_2, Item2UpdateView_3, Item2UpdateView_4, Item2UpdateView_5, Item2UpdateView_6, \
@@ -24,7 +24,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.urls import path, include
 from app import views
-from django.contrib.auth import views as auth_views
+#from django.contrib.auth import views as auth_views
 #from accounts import views as accounts_views
 #from boards import views
 
@@ -99,9 +99,11 @@ urlpatterns = [
     path('export/',PostExport, name='output_csv'),
     path('', ItemFilterView.as_view(), name='index'),
     path('', views.index),
-    path('admin/password_change/', auth_views.PasswordChangeView.as_view(), name='password_change'),
-    
-    path('accounts/', include('django.contrib.auth.urls')),
+    path('password_change/', PasswordChange.as_view(), name='password_change'),
+    #path('admin/password_change/', auth_views.PasswordChangeView.as_view(), name='password_change'),
+    path('password_change/done/', PasswordChangeDone.as_view(), name='password_change_done'),
+
+    #path('accounts/', include('django.contrib.auth.urls')),
     #path('login/', auth_views.LoginView.as_view(template_name='app/login.html'), name='login'),
     #path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 

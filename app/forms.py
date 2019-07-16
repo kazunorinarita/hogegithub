@@ -13,6 +13,12 @@ from .models import Item6
 from .models import Item7
 from .models import Item8
 
+from django.contrib.auth.forms import (
+    AuthenticationForm, UserCreationForm, PasswordChangeForm
+)
+from django.contrib.auth import get_user_model
+
+
 class Item0Form(forms.ModelForm):
     class Meta:
         model = Item
@@ -665,4 +671,12 @@ class Item26Form_2(forms.ModelForm):
                     "Q6_4": forms.RadioSelect(),
                     "Q6_5": forms.RadioSelect(),
                   }
+
+class MyPasswordChangeForm(PasswordChangeForm):
+    """パスワード変更フォーム"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
 

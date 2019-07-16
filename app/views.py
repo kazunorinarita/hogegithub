@@ -138,6 +138,8 @@ from datetime import datetime, date, time, timedelta
 import csv
 import urllib
 from django.http import HttpResponse
+from django.contrib.auth.views import PasswordChangeView ,PasswordChangeDoneView
+from .forms import MyPasswordChangeForm
 
 # 未ログインのユーザーにアクセスを許可する場合は、LoginRequiredMixinを継承から外してください。
 #
@@ -146,7 +148,9 @@ from django.http import HttpResponse
 
 def index(self, request, **kwargs):
 
-    return HttpResponseRedirect(reverse('password_change',args=request))
+    #return HttpResponseRedirect(reverse('password_change',args=request))
+    return redirect('password_change')
+
 
 class ItemFilterView(LoginRequiredMixin, FilterView):
     """
@@ -173,8 +177,10 @@ class ItemFilterView(LoginRequiredMixin, FilterView):
         リクエスト受付
         セッション変数の管理:一覧画面と詳細画面間の移動時に検索条件が維持されるようにする。
         """
+
         if self.request.user.updated_at == None: 
-           return HttpResponseRedirect(reverse('password_change',args=request))
+        #   return HttpResponseRedirect(reverse('password_change',args=request))
+            return redirect('password_change')
         # 一覧画面内の遷移(GETクエリがある)ならクエリを保存する
         if request.GET:
             request.session['query'] = request.GET
@@ -2635,3 +2641,14 @@ def PostExport(request):
     #    row = []
     #    row += [order_name, order_self, order_primary, order_secondary]
     #    writer.writerow(row)
+
+class PasswordChange(PasswordChangeView):
+    """パスワード変更ビュー"""
+    form_class = MyPasswordChangeForm
+    success_url = reverse_lazy('password_change_done')
+    template_name = "app/password_change.html"
+
+
+class PasswordChangeDone(LoginRequiredMixin,PasswordChangeDoneView):
+    """パスワード変更完了"""
+    template_name = "app/password_change_done.html"
